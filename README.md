@@ -8,4 +8,4 @@
 
 #### 📊 GitHub Stats
 
-![Your Name's GitHub Stats](https://github-readme-stats.vercel.app/api?username=lkaesberg&show_icons=true&count_private=true&hide=issues,contribs&theme=dark)
+![Your Name's GitHub Stats](https://github-readme-stats.vercel.app/api?username=lkaesberg&show_icons=true&count_private=true&hide=issues,contribs&theme=dark&rank_icon=github)
