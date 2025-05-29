@@ -433,47 +433,16 @@ class SolarSystem {
   
   // Create visual label for planet
   createPlanetLabel(planetData) {
-    // Create text label
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    canvas.width = 512;
-    canvas.height = 256;
-    context.font = "Bold 36px Montserrat, Arial";
-    context.fillStyle = "white";
-    context.textAlign = "center";
-    context.shadowBlur = 15;
-    context.shadowColor = "rgba(255, 255, 255, 0.5)";
-    context.fillText(planetData.title, 256, 128);
+    // Create UI planet label
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'planet-label';
+    labelDiv.textContent = planetData.name;
+    labelDiv.dataset.planet = planetData.name;
+    labelDiv.dataset.label = planetData.name;
+    document.body.appendChild(labelDiv);
     
-    const texture = new THREE.CanvasTexture(canvas);
-    const spriteMaterial = new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true,
-    });
-    
-    const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(50, 25, 1);
-    sprite.userData = { planetName: planetData.name };
-    sprite.userData.isLabel = true;
-    
-    this.scene.add(sprite);
-    this.labelObjects[planetData.name] = sprite;
-    
-    // Create connecting line from planet to label
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.5,
-    });
-    
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0),
-    ]);
-    
-    const line = new THREE.Line(lineGeometry, lineMaterial);
-    this.scene.add(line);
-    this.labelObjects[planetData.name + "Line"] = line;
+    // Store the DOM element reference
+    this.labelObjects[planetData.name + "DOM"] = labelDiv;
   }
   
   // Create orbit lines for planets
@@ -705,31 +674,6 @@ class SolarSystem {
         planetObj.mesh.material.uniforms.lightDirection.value.copy(planetToSun);
       }
       
-      // Update label position
-      const labelOffsetX = x >= 0 ? 30 : -30;
-      const labelOffsetY = planetObj.data.size * 1.2;
-      const label = this.labelObjects[planetName];
-      
-      if (label) {
-        label.position.set(x + labelOffsetX, labelOffsetY, z);
-      }
-      
-      // Update line connecting planet to label
-      const line = this.labelObjects[planetName + "Line"];
-      if (line) {
-        const linePositions = [
-          x, planetObj.data.size * 0.5, z,
-          x + labelOffsetX, labelOffsetY, z
-        ];
-        
-        line.geometry.setAttribute(
-          "position", 
-          new THREE.Float32BufferAttribute(linePositions, 3)
-        );
-        
-        line.geometry.attributes.position.needsUpdate = true;
-      }
-      
       // Handle glow effect based on material type
       if (planetObj.mesh.material.type === "MeshLambertMaterial" && planetObj.mesh.material.emissive) {
         // Remove any glow effect from all planets
@@ -756,13 +700,31 @@ class SolarSystem {
   
   // Handle planet selection from UI
   handlePlanetSelect(planetName) {
+    // Store the active planet
+    this.activePlanet = planetName;
+    
     // If we're already zoomed in and selecting a different planet
     if (this.ui.getIsZoomed() && planetName !== this.ui.getTargetPlanet()) {
       // First return to main view temporarily
       this.returnToMainWithoutAnimation();
-      // Then zoom to the new planet
+      
+      // Then launch the spaceship to the new planet after a short delay
       setTimeout(() => {
-        this.zoomToPlanet(planetName);
+        if (planetName !== this.spaceship.getHomePlanet()) {
+          // Launch the spaceship to the target planet
+          this.ui.showSpaceshipAlert(`Launching to ${planetName}...`);
+          this.spaceship.flyTo(planetName);
+          // Set camera to follow spaceship
+          this.followingSpaceship = true;
+          // Store original camera position for returning later
+          this.originalCameraPosition = this.camera.position.clone();
+          this.originalCameraTarget = this.scene.position.clone();
+          // Reset animation progress
+          this.animationProgress = 0;
+        } else {
+          // We're already at this planet, just zoom in
+          this.zoomToPlanet(planetName);
+        }
       }, 50);
       return;
     }
@@ -827,12 +789,15 @@ class SolarSystem {
     // Show content panel
     this.ui.showPlanetContent(planetName, planetData);
     
-    // Hide label during zoom
-    const label = this.labelObjects[planetName];
-    if (label) label.visible = false;
-    
-    const labelLine = this.labelObjects[planetName + "Line"];
-    if (labelLine) labelLine.visible = false;
+    // Hide all planet labels when zoomed in
+    Object.keys(this.labelObjects).forEach(key => {
+      if (key.endsWith("DOM")) {
+        const labelDiv = this.labelObjects[key];
+        if (labelDiv) {
+          labelDiv.style.display = 'none';
+        }
+      }
+    });
     
     // Store original camera position for returning later
     // Use current position, NOT the initialCameraPosition
@@ -935,16 +900,23 @@ class SolarSystem {
   
   // Return to main solar system view
   returnToMain() {
+    // Clear the active planet
+    this.activePlanet = null;
+    
+    // Hide content panel
+    this.ui.hideContentPanel();
+    
     const targetPlanet = this.ui.getTargetPlanet();
     
-    if (targetPlanet) {
-      // Show label again
-      const label = this.labelObjects[targetPlanet];
-      if (label) label.visible = true;
-      
-      const labelLine = this.labelObjects[targetPlanet + "Line"];
-      if (labelLine) labelLine.visible = true;
-    }
+    // Restore all planet labels
+    Object.keys(this.labelObjects).forEach(key => {
+      if (key.endsWith("DOM")) {
+        const labelDiv = this.labelObjects[key];
+        if (labelDiv) {
+          labelDiv.style.display = 'block';
+        }
+      }
+    });
     
     // Clean up planetary effects
     if (this.planetaryEffects) {
@@ -1136,6 +1108,9 @@ class SolarSystem {
     // Update planet positions
     this.updatePlanetPositions();
     
+    // Update planet labels
+    this.updateLabelsPosition();
+    
     // Update camera during zoom animation
     if (this.ui.getIsZoomed() && this.ui.getTargetPlanet()) {
       // Get current planet position (it may have moved since zoom started)
@@ -1271,6 +1246,55 @@ class SolarSystem {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach((item, index) => {
       item.style.animationDelay = `${1000 + index * 100}ms`;
+    });
+  }
+  
+  // Add a new method to update label positions
+  updateLabelsPosition() {
+    planets.forEach(planetData => {
+      const planet = this.planetObjects[planetData.name];
+      const labelDiv = this.labelObjects[planetData.name + "DOM"];
+      
+      if (planet && labelDiv) {
+        // Get screen position for the planet
+        const planetPos = planet.mesh.position.clone();
+        planetPos.project(this.camera);
+        
+        // Convert to screen coordinates
+        const x = (planetPos.x * 0.5 + 0.5) * window.innerWidth;
+        const y = (-planetPos.y * 0.5 + 0.5) * window.innerHeight - 40; // Offset above planet
+        
+        // Update DOM label position
+        labelDiv.style.left = `${x}px`;
+        labelDiv.style.top = `${y}px`;
+        
+        // Show label only if planet is in front of camera (z < 1)
+        if (planetPos.z < 1) {
+          labelDiv.style.display = 'block';
+          
+          // Calculate distance to determine opacity
+          const distance = this.camera.position.distanceTo(planet.mesh.position);
+          const maxDistance = 1500; // Increased from 700 to 1500 for visibility from further away
+          const opacity = Math.max(0, 1 - (distance / maxDistance));
+          
+          // Only hide labels when very far away
+          if (opacity < 0.05) {
+            labelDiv.style.display = 'none';
+          } else {
+            labelDiv.style.display = 'block';
+            labelDiv.style.opacity = opacity.toString();
+          }
+          
+          // Highlight the active planet
+          if (this.activePlanet === planetData.name) {
+            labelDiv.classList.add('active');
+          } else {
+            labelDiv.classList.remove('active');
+          }
+        } else {
+          labelDiv.style.display = 'none';
+        }
+      }
     });
   }
 }

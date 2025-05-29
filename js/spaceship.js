@@ -10,10 +10,8 @@ class Spaceship {
     this.takeoff = null;
     this.landing = null;
     this.homePlanet = "Earth";
-    this.trailPoints = [];
-    this.maxTrailPoints = 100;
     
-    // Create the spaceship and its trail
+    // Create the spaceship
     this.init();
   }
   
@@ -21,22 +19,7 @@ class Spaceship {
   init() {
     this.spaceship = new THREE.Group();
     
-    // Create the rocket trail (plume)
-    const trailGeometry = new THREE.BufferGeometry();
-    const trailPositions = new Float32Array(this.maxTrailPoints * 3);
-    trailGeometry.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
-    
-    // Use an emissive-like color with additive blending for a hot plume effect
-    const trailMaterial = new THREE.LineBasicMaterial({ 
-      color: 0xffaa00, 
-      transparent: true, 
-      opacity: 0.8, 
-      blending: THREE.AdditiveBlending 
-    });
-    
-    const trailLine = new THREE.Line(trailGeometry, trailMaterial);
-    this.spaceship.userData.trail = trailLine;
-    this.scene.add(trailLine);
+    // No trail is created anymore
     
     // Place spaceship on the home planet (Earth)
     const earthObj = this.planetObjects["Earth"];
@@ -201,22 +184,14 @@ class Spaceship {
       const currentScale = this.takeoff.startScale + (this.takeoff.targetScale - this.takeoff.startScale) * t;
       this.spaceship.scale.set(currentScale, currentScale, currentScale);
       
-      // Show and intensify trail
-      this.spaceship.userData.trail.visible = true;
-      this.spaceship.userData.trail.material.opacity = 0.8 * t;
-      
       // Orient spaceship upward
       this.spaceship.up.set(0, 1, 0);
       this.spaceship.lookAt(new THREE.Vector3(planetPos.x, planetPos.y + planetSize * 20, planetPos.z));
-      
-      // Update the trail
-      this.updateTrail();
       
       return { arrived: false };
     } else if (this.transition) {
       // Flight mode
       this.spaceship.scale.set(10, 10, 10);
-      this.spaceship.userData.trail.visible = true;
       
       const currentTime = performance.now();
       const t = (currentTime - this.transition.startTime) / this.transition.duration;
@@ -253,8 +228,6 @@ class Spaceship {
           // Instead of starting a separate landing sequence, just complete the landing
           this.spaceship.position.copy(targetPlanetPos.clone().add(new THREE.Vector3(0, targetPlanetSize + 0.5, 0)));
           this.spaceship.scale.set(1, 1, 1);
-          this.spaceship.userData.trail.visible = false;
-          this.trailPoints = [];
           
           // Orient the spaceship to stand upright
           this.spaceship.up.set(0, 1, 0);
@@ -280,9 +253,6 @@ class Spaceship {
         const scale = 10 - (landingBlend * 9); // 10 at start of landing phase, 1 at end
         this.spaceship.scale.set(scale, scale, scale);
         
-        // Gradually reduce trail opacity during landing
-        this.spaceship.userData.trail.material.opacity = 0.8 * (1 - landingBlend);
-        
         // Gradually orient spaceship to stand upright on the planet
         const upVector = new THREE.Vector3(0, 1, 0);
         this.spaceship.up.copy(upVector);
@@ -297,9 +267,6 @@ class Spaceship {
         this.spaceship.lookAt(lookTarget);
       }
       
-      // Update the trail
-      this.updateTrail();
-      
       return { arrived: false };
     } else if (this.landing) {
       // This separate landing sequence is no longer used, but kept for compatibility
@@ -309,8 +276,6 @@ class Spaceship {
     } else {
       // Idle animation when landed on a planet
       this.spaceship.scale.set(1, 1, 1);
-      this.spaceship.userData.trail.visible = false;
-      this.trailPoints = [];
       
       // Get the home planet position and size
       const planetObj = this.planetObjects[this.homePlanet];
@@ -330,28 +295,6 @@ class Spaceship {
       
       return { arrived: false };
     }
-  }
-  
-  // Update the visual trail behind the spaceship
-  updateTrail() {
-    // Add current position to trail points
-    this.trailPoints.push(this.spaceship.position.clone());
-    
-    // Remove oldest points if exceeding maximum
-    if (this.trailPoints.length > this.maxTrailPoints) {
-      this.trailPoints.shift();
-    }
-    
-    // Update trail geometry
-    const positions = this.spaceship.userData.trail.geometry.attributes.position.array;
-    for (let i = 0; i < this.trailPoints.length; i++) {
-      positions[i * 3] = this.trailPoints[i].x;
-      positions[i * 3 + 1] = this.trailPoints[i].y;
-      positions[i * 3 + 2] = this.trailPoints[i].z;
-    }
-    
-    this.spaceship.userData.trail.geometry.setDrawRange(0, this.trailPoints.length);
-    this.spaceship.userData.trail.geometry.attributes.position.needsUpdate = true;
   }
   
   // Modified easing function for faster initial acceleration

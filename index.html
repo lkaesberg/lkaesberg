@@ -7,8 +7,13 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Interactive 3D Solar System Portfolio for Lars Kaesberg">
 </head>
 <body>
+  <!-- Background Elements -->
+  <div class="stars-container"></div>
+  
   <!-- Three.js Canvas Container -->
   <div id="canvas-container" class="fade-in-element"></div>
   
@@ -25,14 +30,38 @@
       <p>Navigate the solar system to learn more about me</p>
       <!-- Navigation Menu -->
       <div class="nav-menu">
-        <div class="nav-item" data-planet="Mercury">About Me</div>
-        <div class="nav-item" data-planet="Venus">Skills</div>
-        <div class="nav-item" data-planet="Earth">Experience</div>
-        <div class="nav-item" data-planet="Mars">Projects</div>
-        <div class="nav-item" data-planet="Jupiter">Publications</div>
-        <div class="nav-item" data-planet="Saturn">Education</div>
-        <div class="nav-item" data-planet="Uranus">Awards</div>
-        <div class="nav-item" data-planet="Neptune">Contact</div>
+        <div class="nav-item" data-planet="Mercury">
+          <span class="section-title">About Me</span>
+          <span class="planet-name">Mercury</span>
+        </div>
+        <div class="nav-item" data-planet="Venus">
+          <span class="section-title">Skills</span>
+          <span class="planet-name">Venus</span>
+        </div>
+        <div class="nav-item" data-planet="Earth">
+          <span class="section-title">Experience</span>
+          <span class="planet-name">Earth</span>
+        </div>
+        <div class="nav-item" data-planet="Mars">
+          <span class="section-title">Projects</span>
+          <span class="planet-name">Mars</span>
+        </div>
+        <div class="nav-item" data-planet="Jupiter">
+          <span class="section-title">Publications</span>
+          <span class="planet-name">Jupiter</span>
+        </div>
+        <div class="nav-item" data-planet="Saturn">
+          <span class="section-title">Education</span>
+          <span class="planet-name">Saturn</span>
+        </div>
+        <div class="nav-item" data-planet="Uranus">
+          <span class="section-title">Awards</span>
+          <span class="planet-name">Uranus</span>
+        </div>
+        <div class="nav-item" data-planet="Neptune">
+          <span class="section-title">Contact</span>
+          <span class="planet-name">Neptune</span>
+        </div>
       </div>
     </div>
     
@@ -42,6 +71,7 @@
     <!-- Content Panel -->
     <div class="content-panel">
       <div class="inner-reflection"></div>
+      <div class="panel-glow"></div>
       <div class="close-button"></div>
       <h2 class="content-title"></h2>
       <div class="content-body"></div>
@@ -52,6 +82,22 @@
     
     <!-- Spaceship Alert -->
     <div id="spaceship-alert"></div>
+    
+    <!-- Controls Info -->
+    <div class="controls-info">
+      <div class="control-item">
+        <span class="key">Mouse</span>
+        <span class="action">Navigate</span>
+      </div>
+      <div class="control-item">
+        <span class="key">Click</span>
+        <span class="action">Select Planet</span>
+      </div>
+      <div class="control-item">
+        <span class="key">ESC</span>
+        <span class="action">Return</span>
+      </div>
+    </div>
   </div>
   
   <!-- Three.js Library -->

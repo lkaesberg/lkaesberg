@@ -33,6 +33,13 @@ class UI {
       if (this.onReturnToMain) this.onReturnToMain();
     });
     
+    // Add keyboard support for ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isZoomed) {
+        if (this.onReturnToMain) this.onReturnToMain();
+      }
+    });
+    
     // Navigation menu items
     this.navItems.forEach(item => {
       item.addEventListener('click', (e) => {
@@ -115,7 +122,7 @@ class UI {
     
     // Show back button and hide header
     this.backButton.classList.add("visible");
-    this.backButton.innerHTML = `<span class="back-icon">←</span> Return to Solar System`;
+    this.backButton.innerHTML = `Return to Solar System`;
     this.header.style.opacity = "0";
     
     // Hide the planet label and line if they exist
@@ -140,14 +147,8 @@ class UI {
     this.zoomLine.setAttribute("stroke-width", "0");
   }
   
-  // Return to main view
-  returnToMain() {
-    // Show planet label if it was hidden
-    if (this.targetPlanet) {
-      const label = document.querySelector(`[data-label="${this.targetPlanet}"]`);
-      if (label) label.style.visibility = "visible";
-    }
-    
+  // Hide the content panel (explicitly called from main)
+  hideContentPanel() {
     // Hide panel and show header with animation
     this.contentPanel.classList.remove("active");
     this.header.style.opacity = "1";
@@ -158,6 +159,18 @@ class UI {
     this.zoomLine.setAttribute("y1", 0);
     this.zoomLine.setAttribute("x2", 0);
     this.zoomLine.setAttribute("y2", 0);
+  }
+  
+  // Return to main view
+  returnToMain() {
+    // Show planet label if it was hidden
+    if (this.targetPlanet) {
+      const label = document.querySelector(`[data-label="${this.targetPlanet}"]`);
+      if (label) label.style.visibility = "visible";
+    }
+    
+    // Hide content panel
+    this.hideContentPanel();
     
     // Reset state
     this.isZoomed = false;
