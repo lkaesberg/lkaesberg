@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>3D Solar System Portfolio</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Three.js Canvas Container -->
+  <div id="canvas-container" class="fade-in-element"></div>
+  
+  <!-- SVG line for connecting the panel to the planet -->
+  <svg class="zoom-line">
+    <line x1="0" y1="0" x2="0" y2="0" stroke="white" stroke-width="1" opacity="0.7" />
+  </svg>
+  
+  <!-- UI Layer -->
+  <div class="ui-layer">
+    <!-- Header -->
+    <div class="header fade-in-element">
+      <h1>LARS KAESBERG</h1>
+      <p>Navigate the solar system to learn more about me</p>
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <div class="nav-item" data-planet="Mercury">About Me</div>
+        <div class="nav-item" data-planet="Venus">Skills</div>
+        <div class="nav-item" data-planet="Earth">Experience</div>
+        <div class="nav-item" data-planet="Mars">Projects</div>
+        <div class="nav-item" data-planet="Jupiter">Publications</div>
+        <div class="nav-item" data-planet="Saturn">Education</div>
+        <div class="nav-item" data-planet="Uranus">Awards</div>
+        <div class="nav-item" data-planet="Neptune">Contact</div>
+      </div>
+    </div>
+    
+    <!-- Back Button -->
+    <button class="back-button">Return to Solar System</button>
+    
+    <!-- Content Panel -->
+    <div class="content-panel">
+      <div class="inner-reflection"></div>
+      <div class="close-button"></div>
+      <h2 class="content-title"></h2>
+      <div class="content-body"></div>
+    </div>
+    
+    <!-- Planet Tooltip -->
+    <div class="planet-tooltip"></div>
+    
+    <!-- Spaceship Alert -->
+    <div id="spaceship-alert"></div>
+  </div>
+  
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
+  
+  <!-- GLTFLoader (for loading the rocket model) -->
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/GLTFLoader.js"></script>
+  
+  <!-- Application Scripts -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+:root {
+  --primary-color: #6c63ff;
+  --primary-color-rgb: 108, 99, 255;
+  --accent-color: #ff6584;
+  --accent-color-rgb: 255, 101, 132;
+  --text-color: #ffffff;
+  --dark-bg: #0a0a12;
+  --panel-bg: rgba(20, 20, 30, 0.7);
+  --panel-border: rgba(255, 255, 255, 0.15);
+  --glow-color: rgba(108, 99, 255, 0.5);
+}
+
+/* ------------------------------------------------------ */
+/* Base and Body Styles */
+/* ------------------------------------------------------ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", "Arial", sans-serif;
+}
+
+body {
+  overflow: hidden;
+  background-color: var(--dark-bg);
+  color: var(--text-color);
+}
+
+#canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ------------------------------------------------------ */
+/* Header and Navigation */
+/* ------------------------------------------------------ */
+.header {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  pointer-events: auto;
+  z-index: 5;
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-shadow: 0 0 15px var(--glow-color);
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.header h1:after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 450px;
+  margin-bottom: 25px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Navigation Menu */
+.nav-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.nav-item {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: menuItemFadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.nav-item:hover {
+  background: rgba(108, 99, 255, 0.2);
+  border-color: var(--primary-color);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(108, 99, 255, 0.3);
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.nav-item:hover::after {
+  opacity: 1;
+  animation: sparkSweep 0.8s forwards;
+}
+
+@keyframes sparkSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ------------------------------------------------------ */
+/* Content Panel (Enhanced Redesign) */
+/* ------------------------------------------------------ */
+.content-panel {
+  position: fixed;
+  background: linear-gradient(145deg, rgba(30, 30, 45, 0.8) 0%, rgba(15, 15, 25, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  width: 450px;
+  max-height: 75vh;
+  padding: 40px;
+  overflow: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: auto;
+  transition:
+    opacity 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
+    visibility 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1),
+    box-shadow 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 20;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 2px 2px rgba(255, 255, 255, 0.08);
+  transform: translateY(0) scale(0.95) translateX(20px);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: transform, opacity;
+  right: 40px;
+  top: 50%;
+}
+
+.content-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, 
+    rgba(var(--primary-color-rgb), 0.12) 0%, 
+    rgba(var(--primary-color-rgb), 0) 100%);
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.content-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) scale(1) translateX(0);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 15px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(var(--primary-color-rgb), 0.1),
+    inset 0 2px 2px rgba(255, 255, 255, 0.1);
+}
+
+.content-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.content-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.content-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.content-title {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: var(--text-color);
+  position: relative;
+  padding-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transform: translateZ(20px);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+}
+
+.content-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--primary-color), 
+    var(--accent-color) 100%
+  );
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.5);
+}
+
+.content-body {
+  line-height: 1.8;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateZ(10px);
+  font-size: 1.05rem;
+}
+
+.content-body h3 {
+  color: var(--primary-color);
+  margin: 32px 0 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 1.4rem;
+  position: relative;
+  display: inline-block;
+}
+
+.content-body h3:first-child {
+  margin-top: 0;
+}
+
+.content-body h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(var(--primary-color-rgb), 0.4);
+  transform: scaleX(0.3);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.content-body h3:hover::after {
+  transform: scaleX(1);
+}
+
+.content-body p, .content-body li {
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+
+.content-body p {
+  margin-bottom: 20px;
+}
+
+.content-body strong {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.content-body ul {
+  padding-left: 10px;
+  margin-bottom: 24px;
+  list-style-type: none;
+}
+
+.content-body li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 14px;
+}
+
+.content-body li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.7);
+}
+
+.content-body a {
+  color: var(--primary-color);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  border-radius: 4px;
+}
+
+.content-body a:hover {
+  color: var(--accent-color);
+  background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.content-body a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.content-body a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* ------------------------------------------------------ */
+/* Close Button */
+/* ------------------------------------------------------ */
+.close-button {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  z-index: 21; 
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  transform: translateZ(30px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.close-button:hover {
+  background: rgba(var(--accent-color-rgb), 0.15);
+  transform: rotate(90deg) translateZ(30px);
+  border-color: rgba(var(--accent-color-rgb), 0.3);
+}
+
+.close-button:before,
+.close-button:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: white;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+.close-button:before {
+  transform: rotate(45deg);
+}
+
+.close-button:after {
+  transform: rotate(-45deg);
+}
+
+.close-button:hover:before,
+.close-button:hover:after {
+  background: var(--accent-color);
+}
+
+/* ------------------------------------------------------ */
+/* Back Button */
+/* ------------------------------------------------------ */
+.back-button {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  padding: 12px 24px;
+  background: rgba(108, 99, 255, 0.2);
+  border: 1px solid var(--primary-color);
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.back-button.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-button:hover {
+  background: rgba(108, 99, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(108, 99, 255, 0.4);
+}
+
+/* ------------------------------------------------------ */
+/* Loading Screen (replaced with fade-in animations) */
+/* ------------------------------------------------------ */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for planets */
+.planet-animation {
+  opacity: 0;
+  animation: fadeInScale 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Sun animation */
+.sun-animation {
+  opacity: 0;
+  filter: blur(10px);
+  animation: sunFadeIn 2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes sunFadeIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Orbit line animation */
+.orbit-animation {
+  opacity: 0;
+  animation: fadeInOrbit 1.5s ease-out forwards;
+}
+
+@keyframes fadeInOrbit {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 0.18;
+    transform: scale(1);
+  }
+}
+
+/* Star field animation */
+.star-animation {
+  opacity: 0;
+  animation: starFadeIn 3s ease-out forwards;
+}
+
+@keyframes starFadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Menu item staggered animation */
+.nav-item {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: menuItemFadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes menuItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------ */
+/* Spaceship Alert (display when near a planet) */
+/* ------------------------------------------------------ */
+#spaceship-alert {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 25px;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 100;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#spaceship-alert.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#spaceship-alert.pulse {
+  animation: alertPulse 0.5s ease;
+}
+
+.alert-icon {
+  font-size: 1.3rem;
+}
+
+.alert-message {
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+@keyframes alertPulse {
+  0% { transform: translateX(-50%) scale(0.95); }
+  50% { transform: translateX(-50%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* ------------------------------------------------------ */
+/* Planet Badge and Color Indicator */
+/* ------------------------------------------------------ */
+.planet-badge {
+  position: absolute;
+  top: -15px;
+  right: 30px;
+  background: linear-gradient(135deg, var(--primary-color), rgba(var(--primary-color-rgb), 0.7));
+  color: white;
+  font-size: 0.8rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 8px rgba(var(--primary-color-rgb), 0.5);
+  text-transform: uppercase;
+  transform: translateZ(30px);
+  backdrop-filter: blur(5px);
+}
+
+.planet-color-indicator {
+  position: absolute;
+  top: 40px;
+  left: -5px;
+  width: 10px;
+  height: 50px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ------------------------------------------------------ */
+/* SVG line used to connect the panel to the planet */
+/* ------------------------------------------------------ */
+.zoom-line {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+}
+
+.zoom-line line {
+  stroke-dasharray: 5, 3;
+  animation: dash 15s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -50;
+  }
+}
+
+/* ------------------------------------------------------ */
+/* Responsive Adjustments */
+/* ------------------------------------------------------ */
+@media (max-width: 1200px) {
+  .header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .content-panel {
+    width: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    top: 20px;
+    left: 20px;
+  }
+  
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header p {
+    font-size: 1rem;
+    max-width: 350px;
+  }
+  
+  .content-panel {
+    width: 85%;
+    max-height: 70%;
+    padding: 25px;
+  }
+  
+  .content-title {
+    font-size: 1.5rem;
+  }
+  
+  .nav-menu {
+    gap: 8px;
+  }
+  
+  .nav-item {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  
+  .back-button {
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header p {
+    font-size: 0.9rem;
+    max-width: 280px;
+  }
+  
+  .content-panel {
+    width: 90%;
+    padding: 20px;
+  }
+  
+  .content-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  
+  .content-body h3 {
+    font-size: 1.1rem;
+  }
+  
+  .nav-item {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ------------------------------------------------------ */
+/* Planet Tooltip */
+/* ------------------------------------------------------ */
+.planet-tooltip {
+  position: absolute;
+  background-color: rgba(15, 15, 25, 0.6);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(5px);
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  mix-blend-mode: normal;
+  will-change: transform, opacity;
+}
+
+.planet-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+} 
