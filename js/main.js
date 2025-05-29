@@ -15,6 +15,15 @@ class SolarSystem {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     
+    // Touch control properties
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchPreviousX = 0;
+    this.touchPreviousY = 0;
+    this.touchMoved = false;
+    this.isPointerDown = false;
+    this.isMobile = window.innerWidth < 768;
+    
     // Objects and state
     this.planetObjects = {};
     this.labelObjects = {};
@@ -81,6 +90,16 @@ class SolarSystem {
     window.addEventListener("mousemove", this.onMouseMove.bind(this));
     window.addEventListener("click", this.onMouseClick.bind(this));
     
+    // Add touch event listeners for mobile
+    window.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
+    window.addEventListener("touchmove", this.onTouchMove.bind(this), { passive: false });
+    window.addEventListener("touchend", this.onTouchEnd.bind(this), { passive: false });
+    
+    // Add pointer events for unified mouse/touch handling
+    window.addEventListener("pointerdown", this.onPointerDown.bind(this));
+    window.addEventListener("pointerup", this.onPointerUp.bind(this));
+    window.addEventListener("pointercancel", this.onPointerUp.bind(this));
+    
     // Create spaceship
     this.spaceship = new Spaceship(this.scene, this.planetObjects);
     
@@ -89,6 +108,12 @@ class SolarSystem {
     
     // Add fade-in animations to UI elements with staggered delays
     this.animateUIElements();
+    
+    // Update mobile state on resize
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+      this.onWindowResize();
+    });
   }
   
   // Add scene lighting
@@ -957,10 +982,18 @@ class SolarSystem {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Update planet labels positions
+    this.updateLabelsPosition();
   }
   
   // Mouse move handler for hover effects
   onMouseMove(event) {
+    // Skip if we're in touch mode
+    if (this.isPointerDown && this.isMobile) {
+      return;
+    }
+    
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     
@@ -1296,6 +1329,112 @@ class SolarSystem {
         }
       }
     });
+  }
+  
+  // Handle touch start event
+  onTouchStart(event) {
+    // Prevent default to avoid unwanted scrolling
+    if (event.target === this.renderer.domElement) {
+      event.preventDefault();
+    }
+    
+    if (event.touches.length === 1) {
+      // Single touch - store the position
+      this.touchStartX = event.touches[0].clientX;
+      this.touchStartY = event.touches[0].clientY;
+      this.touchPreviousX = event.touches[0].clientX;
+      this.touchPreviousY = event.touches[0].clientY;
+      this.touchMoved = false;
+      
+      // Update mouse position for raycasting
+      this.mouse.x = (this.touchStartX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(this.touchStartY / window.innerHeight) * 2 + 1;
+      
+      // Check for planet hover
+      this.checkPlanetHover();
+    }
+  }
+  
+  // Handle touch move event
+  onTouchMove(event) {
+    if (event.target === this.renderer.domElement) {
+      event.preventDefault();
+    }
+    
+    if (event.touches.length === 1 && !this.ui.getIsZoomed()) {
+      // Calculate how much the touch moved
+      const touchX = event.touches[0].clientX;
+      const touchY = event.touches[0].clientY;
+      
+      // Calculate delta from previous position
+      const deltaX = touchX - this.touchPreviousX;
+      const deltaY = touchY - this.touchPreviousY;
+      
+      // Update previous position
+      this.touchPreviousX = touchX;
+      this.touchPreviousY = touchY;
+      
+      // Check if we've moved enough to consider it a drag (not a tap)
+      if (Math.abs(touchX - this.touchStartX) > 10 || Math.abs(touchY - this.touchStartY) > 10) {
+        this.touchMoved = true;
+      }
+      
+      // If we're not in a zoomed state, rotate the camera
+      if (!this.isAnimating && !this.followingSpaceship) {
+        this.rotateCamera(deltaX * 0.005, deltaY * 0.005);
+      }
+    }
+  }
+  
+  // Handle touch end event
+  onTouchEnd(event) {
+    // If the touch didn't move much, treat it as a tap (for selecting planets)
+    if (!this.touchMoved && event.target === this.renderer.domElement) {
+      this.onMouseClick({
+        clientX: this.touchStartX,
+        clientY: this.touchStartY
+      });
+    }
+  }
+  
+  // Handle pointer down event (unifies mouse and touch)
+  onPointerDown(event) {
+    this.isPointerDown = true;
+  }
+  
+  // Handle pointer up event
+  onPointerUp(event) {
+    this.isPointerDown = false;
+  }
+  
+  // Rotate camera based on movement
+  rotateCamera(deltaX, deltaY) {
+    // Get current camera position
+    const camPos = this.camera.position.clone();
+    
+    // Orbit around the origin
+    const radius = camPos.length();
+    
+    // Calculate spherical coordinates
+    const theta = Math.atan2(camPos.x, camPos.z);
+    const phi = Math.acos(camPos.y / radius);
+    
+    // Apply the rotations
+    const newTheta = theta - deltaX;
+    const newPhi = Math.max(0.1, Math.min(Math.PI - 0.1, phi - deltaY));
+    
+    // Convert back to Cartesian coordinates
+    const sinPhiRadius = radius * Math.sin(newPhi);
+    camPos.x = sinPhiRadius * Math.sin(newTheta);
+    camPos.y = radius * Math.cos(newPhi);
+    camPos.z = sinPhiRadius * Math.cos(newTheta);
+    
+    // Update camera position
+    this.camera.position.copy(camPos);
+    this.camera.lookAt(this.scene.position);
+    
+    // Update the original camera position (for returning to main view)
+    this.originalCameraPosition.copy(camPos);
   }
 }
 
