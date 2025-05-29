@@ -11,9 +11,10 @@ const planets = [
     // Mercury has no atmosphere
     content: `
       <h3>Hello, I'm Lars Kaesberg</h3>
-      <p>I'm a software developer with a passion for creating interactive and immersive digital experiences.</p>
-      <p>With a background in both front-end and back-end development, I enjoy building applications that combine beautiful interfaces with powerful functionality.</p>
-      <p>When I'm not coding, you can find me exploring the latest technologies, contributing to open-source projects, or enjoying outdoor activities.</p>
+      <p>I'm studying Computer Science at the University of Göttingen.</p>
+      <p>I'm interested in machine learning, deep learning, and robotics.</p>
+      <p>I'm enthusiastic about quadcopters and drone technology.</p>
+      <p>I'm also interested in rockets, space, and astronomy.</p>
     `,
   },
   {
@@ -28,12 +29,11 @@ const planets = [
     content: `
       <h3>Technical Skills</h3>
       <ul>
-        <li><strong>Languages:</strong> JavaScript, TypeScript, Python, Java, HTML5/CSS3</li>
-        <li><strong>Frameworks:</strong> React, Vue.js, Node.js, Express, Django</li>
-        <li><strong>3D & Graphics:</strong> Three.js, WebGL, D3.js, Canvas</li>
-        <li><strong>Data:</strong> SQL, MongoDB, GraphQL, REST APIs</li>
-        <li><strong>Tools:</strong> Git, Docker, AWS, Firebase</li>
-        <li><strong>Design:</strong> Figma, Adobe XD, responsive design principles</li>
+        <li><strong>Natural Language Processing & LLMs:</strong> Text understanding, generation, evaluation</li>
+        <li><strong>Deep Learning & Data Analysis:</strong> PyTorch/TensorFlow pipelines, experiment tracking</li>
+        <li><strong>Software Engineering:</strong> Full-stack Python/TypeScript, CI/CD, open-source workflow</li>
+        <li><strong>Autonomous Drones & Embedded AI:</strong> Thermal imaging, real-time inference</li>
+        <li><strong>Scientific Writing & Reviewing:</strong> Author of peer-reviewed NLP papers</li>
       </ul>
     `,
   },
@@ -47,14 +47,11 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(100, 150, 230, 0.25)",
     content: `
-      <h3>Senior Developer at TechCorp</h3>
-      <p>Developed and maintained multiple client-facing web applications, implementing modern front-end architectures and optimizing performance.</p>
+      <h3>Doctoral Researcher, University of Göttingen</h3>
+      <p>01/2025 – present</p>
       
-      <h3>Frontend Engineer at WebSolutions</h3>
-      <p>Created responsive, cross-browser compatible websites and applications for various clients in the e-commerce and finance sectors.</p>
-      
-      <h3>Full Stack Developer at StartupX</h3>
-      <p>Built RESTful APIs and interactive user interfaces for a startup focused on social networking and content sharing.</p>
+      <h3>Academic Tutor, CS Dept., University of Göttingen</h3>
+      <p>2021 – 2025 (algorithms & ML courses)</p>
     `,
   },
   {
@@ -67,14 +64,11 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(220, 100, 70, 0.2)",
     content: `
-      <h3>Interactive Data Visualization Dashboard</h3>
-      <p>A real-time analytics platform using D3.js and React, allowing users to explore complex datasets through intuitive visualizations.</p>
+      <h3>FawnRescue</h3>
+      <p>Open-hardware drone, thermal camera and YOLO-based detection stack that debuted at IdeenExpo 2024.</p>
       
-      <h3>E-commerce Platform</h3>
-      <p>A full-featured online store with product management, user accounts, and payment processing using Node.js and MongoDB.</p>
-      
-      <h3>3D Portfolio Experience</h3>
-      <p>This very website you're exploring now, built with Three.js to create an immersive, interactive solar system portfolio.</p>
+      <h3>CiteAssist</h3>
+      <p>ACL-published web service that auto-generates BibTeX for arXiv/Zenodo preprints.</p>
     `,
   },
   {
@@ -119,14 +113,11 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(218, 214, 202, 0.2)",
     content: `
-      <h3>Master's in Computer Science</h3>
-      <p>University of Technology, specializing in Interactive Media and Graphics</p>
+      <h3>M.Sc. Computer Science – Artificial Intelligence</h3>
+      <p>University of Göttingen, 10/2022 – 12/2024</p>
       
-      <h3>Bachelor's in Software Engineering</h3>
-      <p>Tech Institute, with a focus on Web Technologies and Systems Design</p>
-      
-      <h3>Certifications</h3>
-      <p>Advanced JavaScript, Cloud Architecture, UX Design Fundamentals</p>
+      <h3>B.Sc. Computer Science – Computational Neuroscience</h3>
+      <p>University of Göttingen, 10/2019 – 10/2022</p>
     `,
   },
   {
@@ -139,14 +130,8 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(190, 230, 230, 0.2)",
     content: `
-      <h3>Best Web Experience Award</h3>
-      <p>Received for innovative use of WebGL in an interactive museum exhibit website.</p>
-      
-      <h3>Hackathon Winner</h3>
-      <p>First place in the annual TechFest competition for a real-time collaborative coding platform.</p>
-      
-      <h3>Innovation in Digital Media</h3>
-      <p>Recognized for contributions to open-source graphics libraries and visualization tools.</p>
+      <h3>Best Student</h3>
+      <p>Currently place 1 and 6 on the StudIP ranking for University of Göttingen.</p>
     `,
   },
   {
@@ -160,11 +145,10 @@ const planets = [
     atmosphereColor: "rgba(90, 155, 213, 0.25)",
     content: `
       <h3>Get In Touch</h3>
-      <p><strong>Email:</strong> <a href="mailto:lars.kaesberg@example.com">lars.kaesberg@example.com</a></p>
-      <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/larskaesberg" target="_blank">linkedin.com/in/larskaesberg</a></p>
+      <p><strong>Email:</strong> <a href="mailto:l.kaesberg@uni-goettingen.de">l.kaesberg@uni-goettingen.de</a></p>
+      <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/lars-kaesberg-351664217/" target="_blank">linkedin.com/in/lars-kaesberg</a> (quickest for networking)</p>
       <p><strong>GitHub:</strong> <a href="https://github.com/lkaesberg" target="_blank">github.com/lkaesberg</a></p>
-      <p><strong>Twitter:</strong> <a href="https://twitter.com/larskaesberg" target="_blank">@larskaesberg</a></p>
-      <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
+      <p>I'm always open to discussing new projects, creative ideas, or opportunities.</p>
     `,
   },
 ];

@@ -150,11 +150,19 @@ class Spaceship {
         const startPlanet = this.planetObjects[this.takeoff.currentPlanet].mesh.position.clone();
         const targetPlanet = this.planetObjects[this.takeoff.targetPlanet].mesh.position.clone();
         
-        // Start actual flight
+        // Calculate distance between planets
+        const distance = startPlanet.distanceTo(targetPlanet);
+        
+        // Start actual flight - Apply a more aggressive speed scaling for longer distances
+        // Use a square root scaling to make longer distances much faster
+        // Base duration reduced from 4500 to 3000
+        const baseDuration = 3000;
+        const speedScale = Math.sqrt(distance / 200);
+        
         this.transition = {
           start: this.spaceship.position.clone(),
           startTime: performance.now(),
-          duration: 4500 * (startPlanet.distanceTo(targetPlanet) / 200), // Reduced from 8000 to 4500 for faster flight
+          duration: baseDuration * speedScale,
           targetPlanet: this.takeoff.targetPlanet,
           currentPlanet: this.takeoff.currentPlanet,
           hoverPosition: null // Will be calculated during flight
@@ -170,7 +178,8 @@ class Spaceship {
       const planetSize = planetObj.data.size;
       
       // Calculate takeoff position (moving upward from the planet)
-      const liftHeight = planetSize * 1.2 * t; // Reduced height multiplier from 3 to 1.2
+      // Increased takeoff speed by increasing the multiplier from 1.2 to 2.0
+      const liftHeight = planetSize * 2.0 * t;
       const takeoffPos = new THREE.Vector3(
         planetPos.x,
         planetPos.y + planetSize + 0.5 + liftHeight,
@@ -213,7 +222,8 @@ class Spaceship {
       const clampedT = Math.min(t, 1);
       
       // Apply easing to create a more natural motion - faster acceleration, steady cruising speed
-      const easedT = this.easeOutQuad(clampedT);
+      // Changed from easeOutQuad to easeInOutQuad for smoother acceleration and deceleration
+      const easedT = this.easeInOutQuad(clampedT);
       
       // Detect when we're approaching the destination (85% of the way there)
       if (clampedT >= 0.85) {
@@ -300,6 +310,11 @@ class Spaceship {
   // Modified easing function for faster initial acceleration
   easeOutQuad(t) {
     return 1 - (1 - t) * (1 - t);
+  }
+  
+  // New easing function for smoother acceleration and deceleration
+  easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   }
 }
 
