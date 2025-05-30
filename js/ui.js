@@ -90,22 +90,55 @@ class UI {
       });
     });
     
-    // Mobile menu toggle
-    if (this.menuToggle) {
-      this.menuToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.toggleMobileMenu();
-        console.log('Menu toggled, state:', this.menuOpen);
-      });
-    } else {
+    // Add touch events for mobile interaction with 3D scene
+    document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+    document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+    document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
+    
+    // Mobile menu toggle - add multiple event types to ensure it works on all devices
+    this.setupMenuToggle();
+  }
+  
+  // Set up menu toggle with multiple event types for better mobile responsiveness
+  setupMenuToggle() {
+    if (!this.menuToggle) {
       console.error('Menu toggle button not found!');
+      return;
     }
     
-    // Add touch events for mobile interaction with 3D scene
-    document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-    document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-    document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
+    // Remove any existing event listeners
+    this.menuToggle.replaceWith(this.menuToggle.cloneNode(true));
+    
+    // Get the fresh reference
+    this.menuToggle = document.querySelector('.menu-toggle');
+    
+    // Add multiple event types for better mobile support
+    const handleMenuClick = (e) => {
+      // Prevent any default actions and stop propagation
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle the menu
+      this.toggleMobileMenu();
+      console.log('Menu toggled via', e.type, 'state:', this.menuOpen);
+    };
+    
+    // Add click event
+    this.menuToggle.addEventListener('click', handleMenuClick, { passive: false });
+    
+    // Add touchstart/touchend events specifically for mobile
+    this.menuToggle.addEventListener('touchstart', (e) => {
+      // Mark this element as being interacted with
+      this.menuToggleTouched = true;
+    }, { passive: true });
+    
+    this.menuToggle.addEventListener('touchend', (e) => {
+      if (this.menuToggleTouched) {
+        e.preventDefault();
+        handleMenuClick(e);
+        this.menuToggleTouched = false;
+      }
+    }, { passive: false });
   }
   
   // Toggle mobile menu
@@ -124,6 +157,11 @@ class UI {
   
   // Handle touch start event
   handleTouchStart(event) {
+    // Skip if touching the menu toggle
+    if (event.target.closest('.menu-toggle')) {
+      return;
+    }
+    
     // Store the initial touch position
     if (event.touches.length === 1) {
       this.touchStartX = event.touches[0].clientX;
@@ -133,6 +171,17 @@ class UI {
   
   // Handle touch move event
   handleTouchMove(event) {
+    // Skip if touching the menu toggle
+    if (event.target.closest('.menu-toggle')) {
+      return;
+    }
+    
+    // Always allow scrolling in content panel
+    if (event.target.closest('.content-panel') || event.target.closest('.content-body')) {
+      // Let the browser handle the scroll naturally
+      return;
+    }
+    
     // Prevent default only if we're not in a scrollable area
     if (!this.isElementScrollable(event.target)) {
       event.preventDefault();
@@ -141,6 +190,11 @@ class UI {
   
   // Handle touch end event
   handleTouchEnd(event) {
+    // Skip if touching the menu toggle
+    if (event.target.closest('.menu-toggle')) {
+      return;
+    }
+    
     // If we're not interacting with a UI element, it could be a planet selection
     if (event.changedTouches.length === 1) {
       const touch = event.changedTouches[0];
@@ -176,11 +230,20 @@ class UI {
         element.scrollHeight > element.clientHeight
       ) {
         const atTop = element.scrollTop === 0;
-        const atBottom = element.scrollTop + element.clientHeight >= element.scrollHeight;
+        const atBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 10; // Add tolerance
         
         // Allow default scrolling behavior only if not at the boundaries
-        return !(atTop && this.touchStartY > element.getBoundingClientRect().top) && 
-               !(atBottom && this.touchStartY < element.getBoundingClientRect().bottom);
+        // or if scrolling in the direction away from the boundary
+        if (atTop && this.touchStartY < event.touches[0].clientY) {
+          // At top and trying to pull down further - prevent default
+          return false;
+        } else if (atBottom && this.touchStartY > event.touches[0].clientY) {
+          // At bottom and trying to pull up further - prevent default
+          return false;
+        }
+        
+        // Otherwise allow scrolling
+        return true;
       }
       
       element = element.parentElement;
@@ -335,6 +398,11 @@ class UI {
       this.contentPanel.style.top = "auto";
       this.contentPanel.style.bottom = "20px";
       this.contentPanel.style.transform = "translateX(-50%)";
+      
+      // For mobile, ensure the content is scrollable
+      this.contentPanel.style.maxHeight = "75vh";
+      this.contentPanel.style.overflowY = "auto";
+      this.contentPanel.style.webkitOverflowScrolling = "touch";
     } else {
       // On desktop, position on the right side of the screen
       this.contentPanel.style.left = "auto";
