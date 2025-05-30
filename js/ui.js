@@ -97,50 +97,14 @@ class UI {
     document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
     document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     
-    // Mobile menu toggle - add multiple event types to ensure it works on all devices
-    this.setupMenuToggle();
-  }
-  
-  // Set up menu toggle with multiple event types for better mobile responsiveness
-  setupMenuToggle() {
-    if (!this.menuToggle) {
-      console.error('Menu toggle button not found!');
-      return;
-    }
-    
-    // Remove any existing event listeners
-    this.menuToggle.replaceWith(this.menuToggle.cloneNode(true));
-    
-    // Get the fresh reference
-    this.menuToggle = document.querySelector('.menu-toggle');
-    
-    // Add multiple event types for better mobile support
-    const handleMenuClick = (e) => {
-      // Prevent any default actions and stop propagation
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Toggle the menu
-      this.toggleMobileMenu();
-      console.log('Menu toggled via', e.type, 'state:', this.menuOpen);
-    };
-    
-    // Add click event
-    this.menuToggle.addEventListener('click', handleMenuClick, { passive: false });
-    
-    // Add touchstart/touchend events specifically for mobile
-    this.menuToggle.addEventListener('touchstart', (e) => {
-      // Mark this element as being interacted with
-      this.menuToggleTouched = true;
-    }, { passive: true });
-    
-    this.menuToggle.addEventListener('touchend', (e) => {
-      if (this.menuToggleTouched) {
+    // Mobile menu toggle
+    if (this.menuToggle) {
+      this.menuToggle.addEventListener('click', (e) => {
         e.preventDefault();
-        handleMenuClick(e);
-        this.menuToggleTouched = false;
-      }
-    }, { passive: false });
+        e.stopPropagation();
+        this.toggleMobileMenu();
+      });
+    }
   }
   
   // Toggle mobile menu
@@ -297,8 +261,10 @@ class UI {
         `;
       }
       
-      // Ensure menu is always open on desktop
+      // Ensure menu is always visible on desktop (not using max-height)
       if (this.navMenu) {
+        this.navMenu.style.maxHeight = 'none';
+        this.navMenu.style.opacity = '1';
         this.navMenu.classList.add('active');
       }
       
