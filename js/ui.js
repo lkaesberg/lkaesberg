@@ -5,6 +5,8 @@ class UI {
     this.contentPanel = document.querySelector(".content-panel");
     this.contentTitle = document.querySelector(".content-title");
     this.contentBody = document.querySelector(".content-body");
+    this.panelContent = document.querySelector(".panel-content");
+    this.panelHeader = document.querySelector(".panel-header");
     this.backButton = document.querySelector(".back-button");
     this.closeButton = document.querySelector(".close-button");
     this.header = document.querySelector(".header");
@@ -177,7 +179,7 @@ class UI {
     }
     
     // Always allow scrolling in content panel
-    if (event.target.closest('.content-panel') || event.target.closest('.content-body')) {
+    if (event.target.closest('.panel-content') || event.target.closest('.content-body')) {
       // Let the browser handle the scroll naturally
       return;
     }
@@ -372,6 +374,11 @@ class UI {
     this.contentTitle.textContent = planetData.title;
     this.contentBody.innerHTML = planetData.content;
     
+    // Scroll to top of content
+    if (this.panelContent) {
+      this.panelContent.scrollTop = 0;
+    }
+    
     // Show panel and hide header
     this.contentPanel.classList.add("active");
     
@@ -400,9 +407,11 @@ class UI {
       this.contentPanel.style.transform = "translateX(-50%)";
       
       // For mobile, ensure the content is scrollable
-      this.contentPanel.style.maxHeight = "75vh";
-      this.contentPanel.style.overflowY = "auto";
-      this.contentPanel.style.webkitOverflowScrolling = "touch";
+      if (this.panelContent) {
+        this.panelContent.style.maxHeight = "calc(75vh - 100px)"; // Account for header height
+        this.panelContent.style.overflowY = "auto";
+        this.panelContent.style.webkitOverflowScrolling = "touch";
+      }
     } else {
       // On desktop, position on the right side of the screen
       this.contentPanel.style.left = "auto";
@@ -410,6 +419,11 @@ class UI {
       this.contentPanel.style.top = "50%";
       this.contentPanel.style.bottom = "auto";
       this.contentPanel.style.transform = "translateY(-50%)";
+      
+      // Different scroll handling for desktop
+      if (this.panelContent) {
+        this.panelContent.style.maxHeight = "calc(80vh - 120px)"; // Account for header height
+      }
     }
     
     // Hide the connecting line
