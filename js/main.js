@@ -24,6 +24,10 @@ class SolarSystem {
     this.isPointerDown = false;
     this.isMobile = window.innerWidth < 768;
     
+    // Track previous mouse position for desktop drag rotation
+    this.previousMouseX = 0;
+    this.previousMouseY = 0;
+    
     // Objects and state
     this.planetObjects = {};
     this.labelObjects = {};
@@ -1019,6 +1023,17 @@ class SolarSystem {
       document.body.style.cursor = "auto";
       this.ui.hidePlanetTooltip();
     }
+    
+    // If the mouse button is held down on desktop, rotate the camera
+    if (this.isPointerDown && !this.isMobile && !this.ui.getIsZoomed() && !this.followingSpaceship) {
+      const deltaX = event.clientX - this.previousMouseX;
+      const deltaY = event.clientY - this.previousMouseY;
+      this.rotateCamera(deltaX * 0.005, deltaY * 0.005);
+
+      // Update previous mouse position
+      this.previousMouseX = event.clientX;
+      this.previousMouseY = event.clientY;
+    }
   }
   
   // Mouse click handler
@@ -1293,11 +1308,14 @@ class SolarSystem {
         const planetPos = planet.mesh.position.clone();
         planetPos.project(this.camera);
         
-        // Convert to screen coordinates
-        const x = (planetPos.x * 0.5 + 0.5) * window.innerWidth;
-        const y = (-planetPos.y * 0.5 + 0.5) * window.innerHeight - 40; // Offset above planet
+        const rawX = (planetPos.x * 0.5 + 0.5) * window.innerWidth;
+        const rawY = (-planetPos.y * 0.5 + 0.5) * window.innerHeight - 40; // Offset above planet
         
-        // Update DOM label position
+        // Rounding positions to whole pixels greatly reduces visual jitter
+        const x = Math.round(rawX);
+        const y = Math.round(rawY);
+
+        // Update DOM label position using integers to avoid sub-pixel jitter
         labelDiv.style.left = `${x}px`;
         labelDiv.style.top = `${y}px`;
         
@@ -1400,6 +1418,9 @@ class SolarSystem {
   // Handle pointer down event (unifies mouse and touch)
   onPointerDown(event) {
     this.isPointerDown = true;
+    // Store the initial mouse position for desktop drag detection
+    this.previousMouseX = event.clientX;
+    this.previousMouseY = event.clientY;
   }
   
   // Handle pointer up event
