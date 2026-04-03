@@ -1,0 +1,65 @@
+{
+  "lastUpdated": "2026-04-02",
+  "stats": {
+    "papers": 6,
+    "citations": 60,
+    "hIndex": 3,
+    "i10Index": 2
+  },
+  "publications": [
+    {
+      "title": "Stay Focused: Problem Drift in Multi-Agent Debate",
+      "authors": "Jonas Becker, Lars Benedikt Kaesberg, Andreas Stephan, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "venue": "Findings of the Association for Computational Linguistics: EACL 2026",
+      "year": 2026,
+      "citations": 9,
+      "url": "https://aclanthology.org/2026.findings-eacl.502/",
+      "type": "conference"
+    },
+    {
+      "title": "Voting or Consensus? Decision-Making in Multi-Agent Debate",
+      "authors": "Lars Benedikt Kaesberg, Jonas Becker, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
+      "year": 2025,
+      "citations": 34,
+      "url": "https://aclanthology.org/2025.findings-acl.716/",
+      "type": "conference"
+    },
+    {
+      "title": "SPaRC: A Spatial Pathfinding Reasoning Challenge",
+      "authors": "Lars Benedikt Kaesberg, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "venue": "EMNLP 2025 (Main)",
+      "year": 2025,
+      "citations": 1,
+      "url": "https://aclanthology.org/2025.emnlp-main.526/",
+      "type": "conference"
+    },
+    {
+      "title": "MALLM: Multi-Agent Large Language Models Framework",
+      "authors": "Jonas Becker, Lars Benedikt Kaesberg, Niklas Bauer, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "venue": "EMNLP 2025 (Demo)",
+      "year": 2025,
+      "citations": 6,
+      "url": "https://aclanthology.org/2025.emnlp-demos.29/",
+      "type": "conference"
+    },
+    {
+      "title": "CiteAssist: A System for Automated Preprint Citation and BibTeX Generation",
+      "authors": "Lars Benedikt Kaesberg, Terry Ruas, Jan Philip Wahle, Bela Gipp",
+      "venue": "Proceedings of the Fourth Workshop on Scholarly Document Processing (SDP @ ACL 2024)",
+      "year": 2024,
+      "citations": 10,
+      "url": "https://aclanthology.org/2024.sdp-1.10/",
+      "type": "workshop"
+    },
+    {
+      "title": "Decision Protocols in Multi-Agent Large Language Model Conversations",
+      "authors": "Lars Benedikt Kaesberg",
+      "venue": "Master's Thesis, Georg August University of Göttingen",
+      "year": 2024,
+      "citations": 0,
+      "url": null,
+      "type": "thesis"
+    }
+  ]
+}

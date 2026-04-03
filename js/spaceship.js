@@ -1,11 +1,12 @@
 // Spaceship functionality for solar system navigation
-import { THREE } from './main.js';
+const THREE = window.THREE;
 
 class Spaceship {
   constructor(scene, planetObjects) {
     this.scene = scene;
     this.planetObjects = planetObjects;
     this.spaceship = null;
+    this.fallbackRocket = null;
     this.transition = null;
     this.takeoff = null;
     this.landing = null;
@@ -28,32 +29,100 @@ class Spaceship {
     }
     
     this.scene.add(this.spaceship);
+
+    // Always render a simple fallback rocket so a ship is visible
+    this.createFallbackRocket();
     
     // Load the 3D model
     this.loadModel();
   }
+
+  createFallbackRocket() {
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd1d5db,
+      metalness: 0.45,
+      roughness: 0.35
+    });
+    const accentMaterial = new THREE.MeshStandardMaterial({
+      color: 0x60a5fa,
+      emissive: 0x1d4ed8,
+      emissiveIntensity: 0.25,
+      metalness: 0.2,
+      roughness: 0.5
+    });
+    const flameMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b,
+      transparent: true,
+      opacity: 0.9
+    });
+
+    const rocket = new THREE.Group();
+
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 2.8, 18), bodyMaterial);
+    body.position.y = 0.45;
+    rocket.add(body);
+
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.65, 1.5, 18), accentMaterial);
+    nose.position.y = 2.45;
+    rocket.add(nose);
+
+    const finGeometry = new THREE.BoxGeometry(0.12, 0.8, 0.7);
+    for (let i = 0; i < 4; i++) {
+      const fin = new THREE.Mesh(finGeometry, accentMaterial);
+      const angle = (i / 4) * Math.PI * 2;
+      fin.position.set(Math.cos(angle) * 0.62, -0.55, Math.sin(angle) * 0.62);
+      fin.rotation.y = angle;
+      rocket.add(fin);
+    }
+
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.9, 12), flameMaterial);
+    flame.position.y = -1.45;
+    flame.rotation.x = Math.PI;
+    rocket.add(flame);
+
+    this.fallbackRocket = rocket;
+    this.spaceship.add(rocket);
+  }
   
   // Load the 3D spaceship model
   loadModel() {
+    if (!THREE || !THREE.GLTFLoader) {
+      console.warn("GLTFLoader unavailable, using fallback rocket.");
+      return;
+    }
+
     const loader = new THREE.GLTFLoader();
-    loader.load('/rocket.glb', (gltf) => {
-      let rocketModel = gltf.scene;
-      
-      // Adjust scale and orientation
-      rocketModel.scale.set(5, 5, 5);
-      rocketModel.rotation.x = 0.4;
-      
-      // Make the rocket emissive
-      rocketModel.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material.emissive = new THREE.Color(0x111111);
-          child.material.emissiveIntensity = 0.5;
-          child.material.needsUpdate = true;
+    loader.load(
+      '/rocket.glb',
+      (gltf) => {
+        const rocketModel = gltf.scene;
+
+        // Remove fallback once the detailed model is ready
+        if (this.fallbackRocket) {
+          this.spaceship.remove(this.fallbackRocket);
+          this.fallbackRocket = null;
         }
-      });
-      
-      this.spaceship.add(rocketModel);
-    });
+
+        // Adjust scale and orientation
+        rocketModel.scale.set(5, 5, 5);
+        rocketModel.rotation.x = 0.4;
+
+        // Make the rocket slightly emissive
+        rocketModel.traverse((child) => {
+          if (child.isMesh && child.material) {
+            child.material.emissive = new THREE.Color(0x111111);
+            child.material.emissiveIntensity = 0.5;
+            child.material.needsUpdate = true;
+          }
+        });
+
+        this.spaceship.add(rocketModel);
+      },
+      undefined,
+      (error) => {
+        console.warn("Could not load rocket.glb, keeping fallback rocket.", error);
+      }
+    );
   }
   
   // Initiate flight to target planet

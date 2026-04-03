@@ -1,0 +1,37 @@
+name: Update Publications from Google Scholar
+
+on:
+  schedule:
+    # Run at midnight on the 1st of every month
+    - cron: '0 0 1 * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-publications:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install scholarly requests
+      
+      - name: Fetch publications from Google Scholar
+        run: |
+          python scripts/fetch_publications.py
+      
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/publications.json
+          git diff --staged --quiet || (git commit -m "📚 Auto-update publications from Google Scholar" && git push)

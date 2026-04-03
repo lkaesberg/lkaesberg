@@ -1,13 +1,17 @@
 // Main entry point for the 3D Solar System Portfolio application
-import { planets } from './planets.js';
-import { Spaceship } from './spaceship.js';
-import { UI } from './ui.js';
+import { planets } from './planets.js?v=20260403-solar-fix2';
+import { UI } from './ui.js?v=20260403-solar-fix2';
 
 // Make THREE accessible to other modules
 export const THREE = window.THREE;
 
 class SolarSystem {
   constructor() {
+    // Keep an instance reference for debugging/integration hooks
+    window.__solar = this;
+    globalThis.__solar = this;
+    document.documentElement.dataset.solarReady = "1";
+
     // Core properties
     this.scene = null;
     this.camera = null;
@@ -33,7 +37,10 @@ class SolarSystem {
     this.labelObjects = {};
     this.sunObject = null;
     this.orbitLines = [];
-    this.spaceship = null;
+    this.rocketMarker = null;
+    this.rocketBadge = null;
+    this.rocketHomePlanet = "Earth";
+    this.rocketFlight = null;
     
     // Camera animation properties
     this.originalCameraPosition = null;
@@ -42,7 +49,6 @@ class SolarSystem {
     this.cameraLookAt = new THREE.Vector3();
     this.animationProgress = 0;
     this.animationDuration = 2; // seconds
-    this.followingSpaceship = false; // New property to track camera state
     
     // Initialize UI
     this.ui = new UI();
@@ -57,6 +63,7 @@ class SolarSystem {
   init() {
     // Create scene
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0x050814);
     
     // Set up camera
     const aspect = window.innerWidth / window.innerHeight;
@@ -73,9 +80,10 @@ class SolarSystem {
     this.camera.lookAt(this.scene.position);
     
     // Set up renderer with shadow support
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setClearColor(0x050814, 1);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.getElementById("canvas-container").appendChild(this.renderer.domElement);
@@ -88,6 +96,8 @@ class SolarSystem {
     this.createSun();
     planets.forEach(this.createPlanet.bind(this));
     this.createOrbitLines();
+    this.createRocketMarker();
+    this.createRocketBadge();
     
     // Add event listeners
     window.addEventListener("resize", this.onWindowResize.bind(this));
@@ -104,9 +114,6 @@ class SolarSystem {
     window.addEventListener("pointerup", this.onPointerUp.bind(this));
     window.addEventListener("pointercancel", this.onPointerUp.bind(this));
     
-    // Create spaceship
-    this.spaceship = new Spaceship(this.scene, this.planetObjects);
-    
     // Start animation loop
     this.animate();
     
@@ -119,10 +126,220 @@ class SolarSystem {
       this.onWindowResize();
     });
   }
+
+  createRocketMarker() {
+    if (!this.scene || this.rocketMarker) return;
+
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+      color: 0xe5e7eb,
+      emissive: 0x0f172a,
+      emissiveIntensity: 0.45,
+      metalness: 0.45,
+      roughness: 0.35,
+      depthTest: false
+    });
+    const accentMaterial = new THREE.MeshStandardMaterial({
+      color: 0x60a5fa,
+      emissive: 0x1d4ed8,
+      emissiveIntensity: 0.7,
+      metalness: 0.2,
+      roughness: 0.5,
+      depthTest: false
+    });
+    const flameMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b,
+      transparent: true,
+      opacity: 0.95,
+      depthTest: false
+    });
+
+    const rocket = new THREE.Group();
+
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 6.5, 16), bodyMaterial);
+    body.position.y = 1.4;
+    rocket.add(body);
+
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(1.4, 3.2, 16), accentMaterial);
+    nose.position.y = 5.8;
+    rocket.add(nose);
+
+    const finGeometry = new THREE.BoxGeometry(0.35, 1.6, 1.5);
+    for (let i = 0; i < 4; i++) {
+      const fin = new THREE.Mesh(finGeometry, accentMaterial);
+      const angle = (i / 4) * Math.PI * 2;
+      fin.position.set(Math.cos(angle) * 1.5, -1.3, Math.sin(angle) * 1.5);
+      fin.rotation.y = angle;
+      rocket.add(fin);
+    }
+
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.2, 12), flameMaterial);
+    flame.position.y = -3.2;
+    flame.rotation.x = Math.PI;
+    rocket.add(flame);
+
+    rocket.scale.set(1.35, 1.35, 1.35);
+    rocket.renderOrder = 10;
+    rocket.traverse((child) => {
+      if (child.isMesh) {
+        child.renderOrder = 10;
+      }
+    });
+
+    rocket.userData.flame = flame;
+    this.rocketMarker = rocket;
+    this.rocketMarker.visible = true;
+    this.scene.add(this.rocketMarker);
+    this.updateRocketMarker();
+  }
+
+  createRocketBadge() {
+    if (this.rocketBadge) return;
+
+    const badge = document.createElement("div");
+    badge.className = "rocket-badge";
+    badge.textContent = "🚀";
+    document.body.appendChild(badge);
+    this.rocketBadge = badge;
+  }
+
+  updateRocketBadge() {
+    if (!this.rocketBadge || !this.camera) return;
+
+    if (this.ui?.getIsZoomed()) {
+      this.rocketBadge.style.opacity = "0";
+      return;
+    }
+
+    const sourcePos = this.rocketMarker?.position || this.planetObjects["Earth"]?.mesh?.position;
+    if (!sourcePos) return;
+
+    const projected = sourcePos.clone().project(this.camera);
+    if (projected.z > 1) {
+      this.rocketBadge.style.opacity = "0";
+      return;
+    }
+
+    const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-projected.y * 0.5 + 0.5) * window.innerHeight - 22;
+    this.rocketBadge.style.left = `${Math.round(x)}px`;
+    this.rocketBadge.style.top = `${Math.round(y)}px`;
+    this.rocketBadge.style.opacity = "1";
+  }
+
+  updateRocketMarker() {
+    if (!this.scene) return;
+    if (!this.rocketMarker) {
+      this.createRocketMarker();
+    }
+    if (!this.rocketMarker) return;
+
+    const homePlanetName = this.planetObjects[this.rocketHomePlanet] ? this.rocketHomePlanet : "Earth";
+    const homePlanet = this.planetObjects[homePlanetName];
+    if (!homePlanet) return;
+
+    const homePos = homePlanet.mesh.position;
+    const toCamera = new THREE.Vector3().subVectors(this.camera.position, homePos).normalize();
+    if (!Number.isFinite(toCamera.x) || !Number.isFinite(toCamera.y) || !Number.isFinite(toCamera.z)) {
+      toCamera.set(1, 0.35, 0).normalize();
+    }
+
+    const offset = homePlanet.data.size + 11;
+    const hoverLift = homePlanet.data.size * 0.45;
+    const bob = Math.sin(performance.now() * 0.002) * 1.4;
+
+    this.rocketMarker.position.copy(homePos)
+      .addScaledVector(toCamera, offset)
+      .add(new THREE.Vector3(0, hoverLift + bob, 0));
+    this.rocketMarker.lookAt(homePos.x, homePos.y + homePlanet.data.size * 2.5, homePos.z);
+
+    const flame = this.rocketMarker.userData.flame;
+    if (flame) {
+      const pulse = 0.8 + Math.sin(performance.now() * 0.01) * 0.12;
+      flame.scale.set(pulse, 1, pulse);
+    }
+  }
+
+  flyRocketToPlanet(planetName, onArrival) {
+    const target = this.planetObjects[planetName];
+    if (!target) {
+      if (typeof onArrival === "function") onArrival();
+      return;
+    }
+
+    if (!this.rocketMarker) {
+      this.createRocketMarker();
+    }
+
+    if (!this.rocketMarker) {
+      if (typeof onArrival === "function") onArrival();
+      return;
+    }
+
+    if (!this.rocketFlight && planetName === this.rocketHomePlanet) {
+      if (typeof onArrival === "function") onArrival();
+      return;
+    }
+
+    const startPos = this.rocketMarker.position.clone();
+    const targetPos = target.mesh.position.clone();
+    const distance = startPos.distanceTo(targetPos);
+
+    this.rocketFlight = {
+      targetPlanet: planetName,
+      startPos,
+      startTime: performance.now(),
+      duration: Math.max(900, Math.min(2800, distance * 6)),
+      onArrival: typeof onArrival === "function" ? onArrival : null
+    };
+  }
+
+  updateRocketFlight() {
+    if (!this.rocketFlight || !this.rocketMarker) return false;
+
+    const targetObj = this.planetObjects[this.rocketFlight.targetPlanet];
+    if (!targetObj) {
+      this.rocketFlight = null;
+      return false;
+    }
+
+    const now = performance.now();
+    const t = Math.min((now - this.rocketFlight.startTime) / this.rocketFlight.duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    const targetPos = targetObj.mesh.position.clone();
+    const flightPos = new THREE.Vector3().lerpVectors(this.rocketFlight.startPos, targetPos, eased);
+    const distance = this.rocketFlight.startPos.distanceTo(targetPos);
+    const arcHeight = Math.max(18, Math.min(95, distance * 0.15));
+    flightPos.y += Math.sin(Math.PI * eased) * arcHeight + targetObj.data.size * 0.5;
+    this.rocketMarker.position.copy(flightPos);
+
+    const lookAheadT = Math.min(t + 0.03, 1);
+    const lookAheadEased = lookAheadT < 0.5
+      ? 2 * lookAheadT * lookAheadT
+      : 1 - Math.pow(-2 * lookAheadT + 2, 2) / 2;
+    const aheadPos = new THREE.Vector3().lerpVectors(this.rocketFlight.startPos, targetPos, lookAheadEased);
+    aheadPos.y += Math.sin(Math.PI * lookAheadEased) * arcHeight + targetObj.data.size * 0.5;
+    this.rocketMarker.lookAt(aheadPos);
+
+    const flame = this.rocketMarker.userData.flame;
+    if (flame) {
+      const pulse = 0.95 + Math.sin(now * 0.015) * 0.18;
+      flame.scale.set(pulse, 1, pulse);
+    }
+
+    if (t >= 1) {
+      this.rocketHomePlanet = this.rocketFlight.targetPlanet;
+      const arrivalCallback = this.rocketFlight.onArrival;
+      this.rocketFlight = null;
+      if (arrivalCallback) arrivalCallback();
+    }
+
+    return true;
+  }
   
   // Add scene lighting
   addLights() {
-    const ambientLight = new THREE.AmbientLight(0x333333);
+    const ambientLight = new THREE.AmbientLight(0x666666, 1.2);
     this.scene.add(ambientLight);
     
     // Sun directional light (main shadow caster)
@@ -149,7 +366,7 @@ class SolarSystem {
     this.scene.add(this.sunLight);
     
     // Soft point light at sun position (for general illumination)
-    const sunPointLight = new THREE.PointLight(0xffcc00, 1.5, 1000);
+    const sunPointLight = new THREE.PointLight(0xffcc00, 1.9, 1400);
     this.scene.add(sunPointLight);
   }
   
@@ -172,15 +389,12 @@ class SolarSystem {
       color: 0xffffff,
       size: 1,
       transparent: true,
-      opacity: 0, // Start with opacity 0
+      opacity: 0.85,
       sizeAttenuation: true,
     });
     
     const stars = new THREE.Points(starGeometry, starMaterial);
     this.scene.add(stars);
-    
-    // Animate stars appearance
-    this.animateStarsEntrance(stars, starMaterial);
   }
   
   // Animate stars appearance
@@ -209,7 +423,7 @@ class SolarSystem {
     const sunMaterial = new THREE.MeshBasicMaterial({
       color: 0xffcc00,
       transparent: true,
-      opacity: 0,
+      opacity: 0.95,
     });
     
     this.sunObject = new THREE.Mesh(sunGeometry, sunMaterial);
@@ -220,7 +434,7 @@ class SolarSystem {
     const sunGlowMaterial = new THREE.MeshBasicMaterial({
       color: 0xffcc00,
       transparent: true,
-      opacity: 0,
+      opacity: 0.35,
     });
     
     const sunGlow = new THREE.Mesh(sunGlowGeometry, sunGlowMaterial);
@@ -228,9 +442,6 @@ class SolarSystem {
     
     // Create shader-based night side shader for planets
     this.createPlanetShaders();
-    
-    // Animate sun appearance
-    this.animateSunEntrance(this.sunObject, sunMaterial, sunGlow, sunGlowMaterial);
   }
   
   // Animate sun appearance
@@ -389,8 +600,8 @@ class SolarSystem {
     const z = Math.sin(angle) * planetData.distance;
     planet.position.set(x, 0, z);
     
-    // Set initial scale to 0 for animation
-    planet.scale.set(0.01, 0.01, 0.01);
+    // Keep planets visible immediately so mobile loads are consistent.
+    planet.scale.set(1, 1, 1);
     
     this.scene.add(planet);
     
@@ -426,12 +637,7 @@ class SolarSystem {
     // Create label for the planet
     this.createPlanetLabel(planetData);
     
-    // Animate the planet appearance with a delay based on its distance
-    const animationDelay = 500 + planetData.distance * 1.5;
-    setTimeout(() => {
-      // Animate scale from 0 to 1
-      this.animatePlanetEntrance(planet);
-    }, animationDelay);
+    this.animatePlanetEntrance(planet);
   }
   
   // Animate planet appearance
@@ -493,19 +699,13 @@ class SolarSystem {
       const orbitMaterial = new THREE.LineBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0, // Start with opacity 0
+        opacity: 0.2,
         linewidth: 1.5,
       });
       
       const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
       this.scene.add(orbit);
       this.orbitLines.push(orbit);
-      
-      // Animate orbit line appearance with staggered delay
-      const delay = 300 + index * 150;
-      setTimeout(() => {
-        this.animateOrbitEntrance(orbit, orbitMaterial);
-      }, delay);
     });
   }
   
@@ -731,49 +931,17 @@ class SolarSystem {
   handlePlanetSelect(planetName) {
     // Store the active planet
     this.activePlanet = planetName;
-    
-    // If we're already zoomed in and selecting a different planet
-    if (this.ui.getIsZoomed() && planetName !== this.ui.getTargetPlanet()) {
-      // First return to main view temporarily
-      this.returnToMainWithoutAnimation();
-      
-      // Then launch the spaceship to the new planet after a short delay
-      setTimeout(() => {
-        if (planetName !== this.spaceship.getHomePlanet()) {
-          // Launch the spaceship to the target planet
-          this.ui.showSpaceshipAlert(`Launching to ${planetName}...`);
-          this.spaceship.flyTo(planetName);
-          // Set camera to follow spaceship
-          this.followingSpaceship = true;
-          // Store original camera position for returning later
-          this.originalCameraPosition = this.camera.position.clone();
-          this.originalCameraTarget = this.scene.position.clone();
-          // Reset animation progress
-          this.animationProgress = 0;
-        } else {
-          // We're already at this planet, just zoom in
-          this.zoomToPlanet(planetName);
-        }
-      }, 50);
+
+    if (this.ui.getIsZoomed() && planetName === this.ui.getTargetPlanet()) {
       return;
     }
-    
-    // If we're not already at the selected planet, fly there
-    if (planetName !== this.spaceship.getHomePlanet() && !this.spaceship.isFlying()) {
-      // Launch the spaceship to the target planet
-      this.ui.showSpaceshipAlert(`Launching to ${planetName}...`);
-      this.spaceship.flyTo(planetName);
-      // Set camera to follow spaceship
-      this.followingSpaceship = true;
-      // Store original camera position for returning later
-      this.originalCameraPosition = this.camera.position.clone();
-      this.originalCameraTarget = this.scene.position.clone();
-      // Reset animation progress
-      this.animationProgress = 0;
-    } else if (planetName === this.spaceship.getHomePlanet()) {
-      // We're already at this planet, just zoom in
-      this.zoomToPlanet(planetName);
+
+    if (this.ui.getIsZoomed()) {
+      this.returnToMainWithoutAnimation();
     }
+
+    this.ui.showSpaceshipAlert(`Traveling to ${planetName}...`);
+    this.flyRocketToPlanet(planetName, () => this.zoomToPlanet(planetName));
   }
   
   // Special version of returnToMain that doesn't animate the camera
@@ -953,9 +1121,6 @@ class SolarSystem {
       this.planetaryEffects = null;
     }
     
-    // Stop following spaceship if we were
-    this.followingSpaceship = false;
-    
     // Start camera return animation
     this.animationProgress = 0;
     this.ui.returnToMain();
@@ -989,6 +1154,7 @@ class SolarSystem {
     
     // Update planet labels positions
     this.updateLabelsPosition();
+    this.updateRocketBadge();
   }
   
   // Mouse move handler for hover effects
@@ -1025,7 +1191,7 @@ class SolarSystem {
     }
     
     // If the mouse button is held down on desktop, rotate the camera
-    if (this.isPointerDown && !this.isMobile && !this.ui.getIsZoomed() && !this.followingSpaceship) {
+    if (this.isPointerDown && !this.isMobile && !this.ui.getIsZoomed()) {
       const deltaX = event.clientX - this.previousMouseX;
       const deltaY = event.clientY - this.previousMouseY;
       this.rotateCamera(deltaX * 0.005, deltaY * 0.005);
@@ -1053,46 +1219,7 @@ class SolarSystem {
       
       if (clickedPlanet) {
         const planetName = clickedPlanet.data.name;
-        
-        // If the clicked planet is not the current home planet and we're not already flying
-        if (planetName !== this.spaceship.getHomePlanet() && !this.spaceship.isFlying()) {
-          // Launch the spaceship directly
-          this.ui.showSpaceshipAlert(`Launching to ${planetName}...`);
-          this.spaceship.flyTo(planetName);
-          
-          // Set camera to follow spaceship
-          this.followingSpaceship = true;
-          this.originalCameraPosition = this.camera.position.clone();
-          this.originalCameraTarget = this.scene.position.clone();
-          this.animationProgress = 0;
-        } 
-        // If we're already at this planet, zoom in to view details
-        else if (planetName === this.spaceship.getHomePlanet() && !this.ui.getIsZoomed()) {
-          this.zoomToPlanet(planetName);
-        }
-        // If we're already zoomed in and click a different planet, navigate between planets
-        else if (this.ui.getIsZoomed() && planetName !== this.ui.getTargetPlanet()) {
-          // Clear current view
-          this.returnToMainWithoutAnimation();
-          
-          // If it's the current home planet, just zoom to it
-          if (planetName === this.spaceship.getHomePlanet()) {
-            setTimeout(() => {
-              this.zoomToPlanet(planetName);
-            }, 50);
-          } 
-          // Otherwise, fly to the new planet
-          else {
-            setTimeout(() => {
-              this.ui.showSpaceshipAlert(`Launching to ${planetName}...`);
-              this.spaceship.flyTo(planetName);
-              this.followingSpaceship = true;
-              this.originalCameraPosition = this.camera.position.clone();
-              this.originalCameraTarget = this.scene.position.clone();
-              this.animationProgress = 0;
-            }, 50);
-          }
-        }
+        this.handlePlanetSelect(planetName);
       }
     }
   }
@@ -1155,9 +1282,14 @@ class SolarSystem {
     
     // Update planet positions
     this.updatePlanetPositions();
+    const isRocketFlying = this.updateRocketFlight();
+    if (!isRocketFlying) {
+      this.updateRocketMarker();
+    }
     
     // Update planet labels
     this.updateLabelsPosition();
+    this.updateRocketBadge();
     
     // Update camera during zoom animation
     if (this.ui.getIsZoomed() && this.ui.getTargetPlanet()) {
@@ -1193,87 +1325,6 @@ class SolarSystem {
           }
         }
       }
-    }
-    
-    // Update spaceship
-    const shipStatus = this.spaceship.update();
-    
-    // Camera follows spaceship during flight
-    if (this.followingSpaceship && this.spaceship.isFlying()) {
-      const trackingInfo = this.spaceship.getCameraTrackingInfo();
-      
-      if (trackingInfo) {
-        // Get target planet information
-        const targetPlanetName = trackingInfo.targetPlanet;
-        const targetPlanetObj = this.planetObjects[targetPlanetName];
-        const shipPosition = trackingInfo.shipPosition;
-        
-        if (targetPlanetObj) {
-          const planetPosition = targetPlanetObj.mesh.position.clone();
-          const planetSize = targetPlanetObj.data.size;
-          
-          // Calculate vector from ship to planet
-          const shipToPlanet = new THREE.Vector3().subVectors(planetPosition, shipPosition);
-          const distanceToPlanet = shipToPlanet.length();
-          const normalizedDirection = shipToPlanet.clone().normalize();
-          
-          // Progress affects how we position the camera
-          const flightProgress = trackingInfo.flightProgress;
-          
-          // Simplified camera position calculation:
-          // Position the camera to show both ship and target planet
-          let cameraOffset;
-          
-          if (flightProgress < 0.85) {
-            // During most of the flight: position to see both ship and planet
-            // Calculate a position above and behind the ship, facing the planet
-            cameraOffset = new THREE.Vector3();
-            cameraOffset.copy(normalizedDirection).multiplyScalar(-30); // Behind ship
-            cameraOffset.y += 20; // Above ship
-            
-            // Add some side offset for a better view
-            const up = new THREE.Vector3(0, 1, 0);
-            const side = new THREE.Vector3().crossVectors(normalizedDirection, up).normalize();
-            cameraOffset.add(side.multiplyScalar(20));
-            
-            // Camera position = ship position + offset
-            this.camera.position.copy(shipPosition).add(cameraOffset);
-            
-            // IMPORTANT: Always look directly at the target planet (not the sun)
-            this.camera.lookAt(planetPosition);
-          } else {
-            // Near end of flight: transition to planet view
-            const planetViewingDistance = planetSize * 5;
-            const ringFactor = targetPlanetObj.data.hasRing ? 1.5 : 1;
-            
-            // Calculate a good position for viewing the planet
-            const idealPosition = new THREE.Vector3(
-              planetPosition.x + planetSize * 2 * ringFactor,
-              planetPosition.y + planetSize * 2,
-              planetPosition.z + planetSize * 2 * ringFactor
-            );
-            
-            // Blend factor increases as we approach the planet
-            const blendFactor = (flightProgress - 0.85) / 0.15;
-            
-            // Blend between ship-relative camera and planet-viewing camera
-            this.camera.position.lerp(idealPosition, blendFactor);
-            
-            // Always keep looking at the planet
-            this.camera.lookAt(planetPosition);
-          }
-        } else {
-          // Fallback if planet not found
-          this.camera.position.copy(shipPosition).add(new THREE.Vector3(0, 20, -30));
-          this.camera.lookAt(shipPosition);
-        }
-      }
-    }
-    
-    // If spaceship arrived at a planet, zoom to it and stop following
-    if (shipStatus.arrived) {
-      this.followingSpaceship = false;
-      this.zoomToPlanet(shipStatus.planet);
     }
     
     // Render scene
@@ -1398,7 +1449,7 @@ class SolarSystem {
       }
       
       // If we're not in a zoomed state, rotate the camera
-      if (!this.isAnimating && !this.followingSpaceship) {
+      if (!this.isAnimating) {
         this.rotateCamera(deltaX * 0.005, deltaY * 0.005);
       }
     }
@@ -1459,8 +1510,10 @@ class SolarSystem {
   }
 }
 
-// Initialize on DOM content loaded
-document.addEventListener("DOMContentLoaded", () => {
+// Initialize once, even when module executes after DOMContentLoaded
+const initializeSolarSystem = () => {
+  if (globalThis.__solar && globalThis.__solar.scene) return;
+
   // Add Google Font
   const fontLink = document.createElement('link');
   fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap';
@@ -1468,5 +1521,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(fontLink);
   
   // Initialize application
-  new SolarSystem();
-}); 
+  const instance = new SolarSystem();
+  window.__solar = instance;
+  globalThis.__solar = instance;
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeSolarSystem);
+} else {
+  initializeSolarSystem();
+}

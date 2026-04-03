@@ -1,25 +1,24 @@
-// Planet data with information about each section
+// Planet data for the Space Explorer Easter Egg
 const planets = [
   {
     name: "Mercury",
-    title: "About Me",
+    title: "The Swift Messenger",
     distance: 100,
     size: 8,
     color: "#B7B8B9",
     speed: 0.004,
     textureUrl: null,
-    // Mercury has no atmosphere
     content: `
-      <h3>Hello, I'm Lars Kaesberg</h3>
-      <p>I'm studying Computer Science at the University of Göttingen.</p>
-      <p>I'm interested in machine learning, deep learning, and robotics.</p>
-      <p>I'm enthusiastic about quadcopters and drone technology.</p>
-      <p>I'm also interested in rockets, space, and astronomy.</p>
+      <h3>🌡️ Mercury</h3>
+      <p><strong>Temperature:</strong> -180°C to 430°C</p>
+      <p><strong>Year length:</strong> 88 Earth days</p>
+      <p>Mercury has almost no atmosphere, so heat escapes quickly at night. A single day-night cycle on Mercury takes about 176 Earth days.</p>
+      <p><strong>Fun fact:</strong> A day on Mercury is longer than its year.</p>
     `,
   },
   {
     name: "Venus",
-    title: "Skills",
+    title: "The Morning Star",
     distance: 150,
     size: 14,
     color: "#E6E2AF",
@@ -27,19 +26,16 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(230, 190, 110, 0.2)",
     content: `
-      <h3>Technical Skills</h3>
-      <ul>
-        <li><strong>Natural Language Processing & LLMs:</strong> Text understanding, generation, evaluation</li>
-        <li><strong>Deep Learning & Data Analysis:</strong> PyTorch/TensorFlow pipelines, experiment tracking</li>
-        <li><strong>Software Engineering:</strong> Full-stack Python/TypeScript, CI/CD, open-source workflow</li>
-        <li><strong>Autonomous Drones & Embedded AI:</strong> Thermal imaging, real-time inference</li>
-        <li><strong>Scientific Writing & Reviewing:</strong> Author of peer-reviewed NLP papers</li>
-      </ul>
+      <h3>☁️ Venus</h3>
+      <p><strong>Temperature:</strong> 465°C (hotter than Mercury!)</p>
+      <p><strong>Atmosphere:</strong> 96% Carbon Dioxide</p>
+      <p>Venus rotates backwards compared to most planets, so the Sun appears to rise in the west there.</p>
+      <p><strong>Fun fact:</strong> Surface pressure is about 90 times Earth’s, similar to being deep under Earth’s oceans.</p>
     `,
   },
   {
     name: "Earth",
-    title: "Experience",
+    title: "The Blue Marble",
     distance: 200,
     size: 15,
     color: "#6B93D6",
@@ -47,16 +43,16 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(100, 150, 230, 0.25)",
     content: `
-      <h3>Doctoral Researcher, University of Göttingen</h3>
-      <p>01/2025 – present</p>
-      
-      <h3>Academic Tutor, CS Dept., University of Göttingen</h3>
-      <p>2021 – 2025 (algorithms & ML courses)</p>
+      <h3>🌍 Earth</h3>
+      <p><strong>Age:</strong> ~4.5 billion years</p>
+      <p><strong>Water Coverage:</strong> 71% of surface</p>
+      <p>Earth’s magnetic field and atmosphere help protect life from harmful solar radiation.</p>
+      <p><strong>Fun fact:</strong> Earth is the only planet in our solar system not named after a Greek or Roman god.</p>
     `,
   },
   {
     name: "Mars",
-    title: "Projects",
+    title: "The Red Planet",
     distance: 250,
     size: 12,
     color: "#E27B58",
@@ -64,16 +60,16 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(220, 100, 70, 0.2)",
     content: `
-      <h3>FawnRescue</h3>
-      <p>Open-hardware drone, thermal camera and YOLO-based detection stack that debuted at IdeenExpo 2024.</p>
-      
-      <h3>CiteAssist</h3>
-      <p>ACL-published web service that auto-generates BibTeX for arXiv/Zenodo preprints.</p>
+      <h3>🔴 Mars</h3>
+      <p><strong>Tallest Mountain:</strong> Olympus Mons (21km high!)</p>
+      <p><strong>Moons:</strong> Phobos & Deimos</p>
+      <p>Scientists have found signs of ancient rivers and lakes, showing Mars was likely wetter in the distant past.</p>
+      <p><strong>Fun fact:</strong> Mars has solar-system-wide dust storms that can cover the whole planet.</p>
     `,
   },
   {
     name: "Jupiter",
-    title: "Publications",
+    title: "King of Planets",
     distance: 330,
     size: 30,
     color: "#C3A992",
@@ -81,48 +77,37 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(195, 169, 146, 0.2)",
     content: `
-      <h3>CiteAssist: A System for Automated Preprint Citation and BibTeX Generation (2024)</h3>
-      <p>A system for automated citation generation for preprints, co-authored with T. Ruas, J.P. Wahle, and B. Gipp.</p>
-      <p><a href="https://arxiv.org/abs/2407.03192" target="_blank">View on arXiv</a></p>
-      
-      <h3>Stay Focused: Problem Drift in Multi-Agent Debate (2025)</h3>
-      <p>Research on multi-agent debates, co-authored with J. Becker, A. Stephan, J.P. Wahle, T. Ruas, and B. Gipp.</p>
-      <p><a href="https://arxiv.org/abs/2502.19559" target="_blank">View on arXiv</a></p>
-      
-      <h3>Voting or Consensus? Decision-Making in Multi-Agent Debate (2025)</h3>
-      <p>Study on decision-making processes in multi-agent LLM systems, co-authored with J. Becker, J.P. Wahle, T. Ruas, and B. Gipp.</p>
-      <p><a href="https://arxiv.org/abs/2502.19130" target="_blank">View on arXiv</a></p>
-      
-      <h3>SPaRC: A Spatial Pathfinding Reasoning Challenge (2025)</h3>
-      <p>A benchmark for evaluating spatial reasoning capabilities of AI systems, co-authored with J.P. Wahle, T. Ruas, and B. Gipp.</p>
-      <p><a href="https://arxiv.org/abs/2505.16686" target="_blank">View on arXiv</a></p>
-      
-      <h3>Decision Protocols in Multi-Agent Large Language Model Conversations (2024)</h3>
-      <p>Thesis work at Georg August University of Göttingen focusing on coordination mechanisms for multi-agent LLM systems.</p>
+      <h3>👑 Jupiter</h3>
+      <p><strong>Size:</strong> 1,300 Earths could fit inside!</p>
+      <p><strong>Great Red Spot:</strong> A storm larger than Earth, raging for 400+ years</p>
+      <p><strong>Moons:</strong> 95 known moons including Europa (possible alien life!)</p>
+      <p>Jupiter’s gravity helps deflect or capture many comets and asteroids, influencing the whole solar system.</p>
+      <p><strong>Fun fact:</strong> The Great Red Spot is a giant storm that has lasted for centuries.</p>
     `,
   },
   {
     name: "Saturn",
-    title: "Education",
+    title: "The Ringed Wonder",
     distance: 420,
     size: 26,
     color: "#DAD6CA",
     speed: 0.0014,
     hasRing: true,
-    ringSize: 2.0, // Multiplier for ring size relative to planet
+    ringSize: 2.0,
     textureUrl: null,
     atmosphereColor: "rgba(218, 214, 202, 0.2)",
     content: `
-      <h3>M.Sc. Computer Science – Artificial Intelligence</h3>
-      <p>University of Göttingen, 10/2022 – 12/2024</p>
-      
-      <h3>B.Sc. Computer Science – Computational Neuroscience</h3>
-      <p>University of Göttingen, 10/2019 – 10/2022</p>
+      <h3>💍 Saturn</h3>
+      <p><strong>Ring Span:</strong> 282,000 km wide but only ~10m thick!</p>
+      <p><strong>Density:</strong> So low it would float in water!</p>
+      <p><strong>Moons:</strong> 146 moons - Titan has lakes of liquid methane!</p>
+      <p>Saturn’s rings are made mostly of ice particles, from dust-sized grains to pieces as big as houses.</p>
+      <p><strong>Fun fact:</strong> Saturn is less dense than water.</p>
     `,
   },
   {
     name: "Uranus",
-    title: "Awards",
+    title: "The Ice Giant",
     distance: 500,
     size: 20,
     color: "#D1E7E7",
@@ -130,13 +115,16 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(190, 230, 230, 0.2)",
     content: `
-      <h3>Best Student</h3>
-      <p>Currently place 1 and 6 on the StudIP ranking for University of Göttingen.</p>
+      <h3>🧊 Uranus</h3>
+      <p><strong>Tilt:</strong> 98° - it rolls around the Sun on its side!</p>
+      <p><strong>Temperature:</strong> -224°C (coldest planetary atmosphere)</p>
+      <p>Its extreme axial tilt likely came from an ancient giant impact early in solar-system history.</p>
+      <p><strong>Fun fact:</strong> Uranus rotates almost on its side, unlike any other major planet.</p>
     `,
   },
   {
     name: "Neptune",
-    title: "Contact",
+    title: "The Windiest World",
     distance: 570,
     size: 19,
     color: "#5B9BD5",
@@ -144,11 +132,11 @@ const planets = [
     textureUrl: null,
     atmosphereColor: "rgba(90, 155, 213, 0.25)",
     content: `
-      <h3>Get In Touch</h3>
-      <p><strong>Email:</strong> <a href="mailto:l.kaesberg@uni-goettingen.de">l.kaesberg@uni-goettingen.de</a></p>
-      <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/lars-kaesberg-351664217/" target="_blank">linkedin.com/in/lars-kaesberg</a> (quickest for networking)</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/lkaesberg" target="_blank">github.com/lkaesberg</a></p>
-      <p>I'm always open to discussing new projects, creative ideas, or opportunities.</p>
+      <h3>🌊 Neptune</h3>
+      <p><strong>Wind Speed:</strong> Up to 2,100 km/h - fastest in the solar system!</p>
+      <p><strong>Year Length:</strong> 165 Earth years</p>
+      <p>Neptune was discovered after astronomers predicted its position mathematically from orbital anomalies.</p>
+      <p><strong>Fun fact:</strong> It has the fastest winds measured on any planet in our solar system.</p>
     `,
   },
 ];

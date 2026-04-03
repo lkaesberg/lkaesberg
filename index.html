@@ -1,132 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Lars Benedikt Kaesberg - Portfolio</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lars Benedikt Kaesberg – NLP & AI Researcher</title>
+  
+  <!-- SEO Meta -->
+  <meta name="description" content="Lars Benedikt Kaesberg is a doctoral researcher at the University of Göttingen specializing in Natural Language Processing, Multi-Agent Systems, and AI.">
+  <meta name="keywords" content="Lars Kaesberg, NLP, AI, Machine Learning, University of Göttingen, Multi-Agent Systems, Research">
+  <meta name="author" content="Lars Benedikt Kaesberg">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Lars Benedikt Kaesberg – NLP & AI Researcher">
+  <meta property="og:description" content="Doctoral researcher specializing in NLP, Multi-Agent Systems, and AI at the University of Göttingen.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lkaesberg.de">
+  <meta property="og:image" content="images/profile.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
+  <link rel="shortcut icon" href="/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-  <link rel="manifest" href="/favicon/site.webmanifest" />
-  <meta name="description" content="Interactive 3D Solar System Portfolio for Lars Kaesberg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/modern.css?v=20260403-main-fix3">
 </head>
 <body>
-  <!-- Background Elements -->
-  <div class="stars-container"></div>
-  
-  <!-- Three.js Canvas Container -->
-  <div id="canvas-container" class="fade-in-element"></div>
-  
-  <!-- SVG line for connecting the panel to the planet -->
-  <svg class="zoom-line">
-    <line x1="0" y1="0" x2="0" y2="0" stroke="white" stroke-width="1" opacity="0.7" />
-  </svg>
-  
-  <!-- UI Layer -->
-  <div class="ui-layer">
-    <!-- Header -->
-    <div class="header fade-in-element">
-      <div class="header-top">
-        <h1>LARS BENEDIKT KAESBERG</h1>
-        <!-- Mobile Menu Toggle Button -->
-        <button class="menu-toggle" aria-label="Toggle Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+  <!-- Theme Toggle - Animated Sun/Moon -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+    <div class="theme-toggle-inner">
+      <div class="sun-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
       </div>
-      <p>Navigate the solar system to learn more about me</p>
+      <div class="moon-icon"></div>
+      <div class="moon-stars">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </button>
+
+  <!-- Easter Egg Trigger (hidden in footer copyright - click 3 times) -->
+  <div id="easter-trigger" style="display:none;"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="hero-content">
+        <div class="hero-image">
+          <img src="images/profile.jpg" alt="Lars Benedikt Kaesberg" class="avatar">
+          <div class="status-indicator"></div>
+        </div>
+        
+        <div class="hero-text">
+          <h1>Lars Benedikt Kaesberg</h1>
+          <p class="tagline">Doctoral Researcher in Natural Language Processing</p>
+          
+          <p class="bio">
+            I'm a doctoral researcher at the <a href="https://www.uni-goettingen.de/en/1.html" target="_blank">University of Göttingen</a> 
+            focusing on spatial reasoning with large language models. My research explores how LLMs understand and navigate 
+            spatial environments, particularly through projects like <a href="https://sparc.gipplab.org/" target="_blank">SPaRC</a> and <a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank">Spatial Gym</a>.
+          </p>
+          
+          <div class="hero-links">
+            <a href="mailto:l.kaesberg@uni-goettingen.de" class="btn btn-primary">
+              <i class="fas fa-envelope"></i> Contact
+            </a>
+            <a href="https://github.com/lkaesberg" target="_blank" class="btn btn-secondary">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank" class="btn btn-secondary">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank" class="btn btn-secondary">
+              <i class="fas fa-graduation-cap"></i> Scholar
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- News Section -->
+    <section class="section" id="news">
+      <h2 class="section-title">
+        <span class="title-icon">📰</span>
+        News
+      </h2>
       
-      <!-- Navigation Menu -->
-      <div class="nav-menu">
-        <div class="nav-item" data-planet="Mercury">
-          <span class="section-title">About Me</span>
-          <span class="planet-name">Mercury</span>
+      <div class="news-list" id="news-list">
+        <article class="news-item">
+          <time class="news-date">Nov 2025</time>
+          <span class="news-icon">✈️</span>
+          <p>Attended <a href="https://2025.emnlp.org/" target="_blank">EMNLP 2025</a> in Suzhou, China to present <a href="https://aclanthology.org/2025.emnlp-main.526/" target="_blank">SPaRC</a> and <a href="https://aclanthology.org/2025.emnlp-demos.29/" target="_blank">MALLM</a>.</p>
+        </article>
+        
+        <article class="news-item">
+          <time class="news-date">Jul 2025</time>
+          <span class="news-icon">🏆</span>
+          <p>Our work on <a href="https://aclanthology.org/2025.findings-acl.716/" target="_blank">multi-agent debate decision-making</a> was accepted at ACL 2025 Findings!</p>
+        </article>
+
+        <article class="news-item">
+          <time class="news-date">Jan 2025</time>
+          <span class="news-icon">🎓</span>
+          <p>Started as a doctoral researcher at the University of Göttingen, focusing on multi-agent systems and NLP.</p>
+        </article>
+        
+        <article class="news-item">
+          <time class="news-date">Dec 2024</time>
+          <span class="news-icon">🎓</span>
+          <p>Completed my Master's thesis on "Decision Protocols in Multi-Agent LLM Conversations".</p>
+        </article>
+        
+        <article class="news-item">
+          <time class="news-date">Aug 2024</time>
+          <span class="news-icon">✈️</span>
+          <p>Attended <a href="https://2024.aclweb.org/" target="_blank">ACL 2024</a> in Bangkok, Thailand to present <a href="https://aclanthology.org/2024.sdp-1.10/" target="_blank">CiteAssist</a> at the SDP Workshop.</p>
+        </article>
+        
+        <article class="news-item">
+          <time class="news-date">Jun 2024</time>
+          <span class="news-icon">🦌</span>
+          <p>Presented <a href="https://fawnrescue.github.io/" target="_blank">FawnRescue</a> drone project at IdeenExpo 2024.</p>
+        </article>
+      </div>
+      <button id="news-toggle-btn" class="news-toggle-btn" type="button" aria-expanded="false" hidden>
+        Show more
+      </button>
+    </section>
+
+    <!-- Publications Section -->
+    <section class="section" id="publications">
+      <h2 class="section-title">
+        <span class="title-icon">📚</span>
+        Publications
+      </h2>
+      
+      <p class="section-intro">
+        My research focuses on multi-agent systems, decision-making in LLMs, and spatial reasoning. 
+        Find all my publications on <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank">Google Scholar</a>.
+      </p>
+      
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number" id="stat-papers">7</span>
+          <span class="stat-label">Papers</span>
         </div>
-        <div class="nav-item" data-planet="Venus">
-          <span class="section-title">Skills</span>
-          <span class="planet-name">Venus</span>
+        <div class="stat-card">
+          <span class="stat-number" id="stat-citations">60</span>
+          <span class="stat-label">Citations</span>
         </div>
-        <div class="nav-item" data-planet="Earth">
-          <span class="section-title">Experience</span>
-          <span class="planet-name">Earth</span>
+        <div class="stat-card">
+          <span class="stat-number" id="stat-hindex">3</span>
+          <span class="stat-label">h-index</span>
         </div>
-        <div class="nav-item" data-planet="Mars">
-          <span class="section-title">Projects</span>
-          <span class="planet-name">Mars</span>
-        </div>
-        <div class="nav-item" data-planet="Jupiter">
-          <span class="section-title">Publications</span>
-          <span class="planet-name">Jupiter</span>
-        </div>
-        <div class="nav-item" data-planet="Saturn">
-          <span class="section-title">Education</span>
-          <span class="planet-name">Saturn</span>
-        </div>
-        <div class="nav-item" data-planet="Uranus">
-          <span class="section-title">Awards</span>
-          <span class="planet-name">Uranus</span>
-        </div>
-        <div class="nav-item" data-planet="Neptune">
-          <span class="section-title">Contact</span>
-          <span class="planet-name">Neptune</span>
+        <div class="stat-card">
+          <span class="stat-number" id="stat-i10">2</span>
+          <span class="stat-label">i10-index</span>
         </div>
       </div>
-    </div>
-    
-    <!-- Back Button -->
-    <button class="back-button">Return to Solar System</button>
-    
-    <!-- Content Panel -->
-    <div class="content-panel">
-      <div class="panel-header">
-        <h2 class="content-title"></h2>
-        <div class="close-button"></div>
+      
+      <!-- Publication List -->
+      <div class="publications-list" id="publications-list">
+        <!-- Publications will be loaded dynamically -->
       </div>
-      <div class="panel-content">
-        <div class="content-body"></div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+      <h2 class="section-title">
+        <span class="title-icon">🛠️</span>
+        Projects
+      </h2>
+      
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-icon">🧭</div>
+          <h3>SPaRC</h3>
+          <p>Spatial Pathfinding Reasoning Challenge - A benchmark for evaluating AI spatial reasoning in maze navigation tasks.</p>
+          <div class="project-tags">
+            <span class="tag">Benchmark</span>
+            <span class="tag">LLM</span>
+            <span class="tag">Spatial Reasoning</span>
+          </div>
+          <a href="https://sparc.gipplab.org/" target="_blank" class="project-link">
+            <i class="fas fa-external-link-alt"></i> Website
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">🏋️</div>
+          <h3>Spatial Gym</h3>
+          <p>Training environment for spatial reasoning with LLMs. Generates diverse navigation tasks for model fine-tuning.</p>
+          <div class="project-tags">
+            <span class="tag">Training</span>
+            <span class="tag">LLM</span>
+            <span class="tag">Python</span>
+          </div>
+          <a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank" class="project-link">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">✉️</div>
+          <h3>EmailBot</h3>
+          <p>Discord bot for email verification with 56+ stars. Used by university communities for member validation.</p>
+          <div class="project-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">Discord</span>
+            <span class="tag">Bot</span>
+          </div>
+          <a href="https://emailbot.larskaesberg.de/" target="_blank" class="project-link">
+            <i class="fas fa-external-link-alt"></i> Website
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">🍽️</div>
+          <h3>AI Mensa</h3>
+          <p>Fun app that generates AI images of daily meals in Göttingen university canteens. See what your food might look like!</p>
+          <div class="project-tags">
+            <span class="tag">AI</span>
+            <span class="tag">Image Gen</span>
+            <span class="tag">Web</span>
+          </div>
+          <a href="https://mensa.larskaesberg.de/" target="_blank" class="project-link">
+            <i class="fas fa-external-link-alt"></i> Try it
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">🦌</div>
+          <h3>FawnRescue</h3>
+          <p>Open-hardware drone with thermal camera and YOLO-based detection for rescuing fawns from agricultural machines.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">YOLO</span>
+            <span class="tag">Drone</span>
+          </div>
+          <a href="https://fawnrescue.github.io/" target="_blank" class="project-link">
+            <i class="fas fa-external-link-alt"></i> Website
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">📝</div>
+          <h3>CiteAssist</h3>
+          <p>ACL-published web service that auto-generates BibTeX citations for arXiv and other preprint servers.</p>
+          <div class="project-tags">
+            <span class="tag">NLP</span>
+            <span class="tag">Python</span>
+            <span class="tag">Web</span>
+          </div>
+          <a href="https://citeassist.uni-goettingen.de" target="_blank" class="project-link">
+            <i class="fas fa-external-link-alt"></i> Try it
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">🤖</div>
+          <h3>MALLM</h3>
+          <p>Multi-Agent Large Language Model framework for collaborative AI reasoning and debate systems.</p>
+          <div class="project-tags">
+            <span class="tag">LLM</span>
+            <span class="tag">Multi-Agent</span>
+            <span class="tag">Python</span>
+          </div>
+          <a href="https://github.com/gipplab/MALLM" target="_blank" class="project-link">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-icon">🔭</div>
+          <h3>GotoPiScope</h3>
+          <p>Raspberry Pi-based telescope control system for automated astronomical observations.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag">Astronomy</span>
+          </div>
+          <a href="https://github.com/lkaesberg/GotoPiScope" target="_blank" class="project-link">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </article>
       </div>
-      <div class="panel-glow"></div>
-      <div class="inner-reflection"></div>
-      <div class="panel-accent"></div>
-      <div class="panel-accent-dot"></div>
-    </div>
-    
-    <!-- Planet Tooltip -->
-    <div class="planet-tooltip"></div>
-    
-    <!-- Spaceship Alert -->
-    <div id="spaceship-alert"></div>
-    
-    <!-- Controls Info -->
-    <div class="controls-info">
-      <div class="control-item">
-        <span class="key">Mouse</span>
-        <span class="action">Navigate</span>
+    </section>
+
+    <!-- Experience & Education Section -->
+    <section class="section" id="experience">
+      <h2 class="section-title">
+        <span class="title-icon">💼</span>
+        Experience & Education
+      </h2>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker current"></div>
+          <div class="timeline-content">
+            <h3>Doctoral Researcher</h3>
+            <p class="timeline-org">University of Göttingen • <a href="https://gipplab.uni-goettingen.de/" target="_blank">GippLab</a></p>
+            <p class="timeline-date">Jan 2025 – Present</p>
+            <p>Research on multi-agent systems, LLM reasoning, and NLP applications.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3>Academic Tutor</h3>
+            <p class="timeline-org">University of Göttingen • CS Department</p>
+            <p class="timeline-date">2021 – 2025</p>
+            <p>Teaching assistant for algorithms, data structures, and machine learning courses.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker edu"></div>
+          <div class="timeline-content">
+            <h3>M.Sc. Computer Science</h3>
+            <p class="timeline-org">University of Göttingen • Focus: Artificial Intelligence</p>
+            <p class="timeline-date">Oct 2022 – Dec 2024</p>
+            <p>Thesis: "Decision Protocols in Multi-Agent Large Language Model Conversations"</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-marker edu"></div>
+          <div class="timeline-content">
+            <h3>B.Sc. Computer Science</h3>
+            <p class="timeline-org">University of Göttingen • Focus: Computational Neuroscience</p>
+            <p class="timeline-date">Oct 2019 – Oct 2022</p>
+          </div>
+        </div>
       </div>
-      <div class="control-item">
-        <span class="key">Click</span>
-        <span class="action">Select Planet</span>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+      <h2 class="section-title">
+        <span class="title-icon">⚡</span>
+        Skills & Interests
+      </h2>
+      
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3><i class="fas fa-brain"></i> Research</h3>
+          <ul>
+            <li>Spatial Reasoning with LLMs</li>
+            <li>Natural Language Processing</li>
+            <li>Large Language Models</li>
+            <li>AI Benchmarking</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3><i class="fas fa-code"></i> Programming</h3>
+          <ul>
+            <li>Python (PyTorch, Transformers)</li>
+            <li>TypeScript / JavaScript</li>
+            <li>C++ / CUDA</li>
+            <li>Git / CI/CD</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3><i class="fas fa-cogs"></i> Technologies</h3>
+          <ul>
+            <li>Deep Learning Frameworks</li>
+            <li>Cloud Computing (AWS, GCP)</li>
+            <li>Docker / Kubernetes</li>
+            <li>Embedded Systems</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3><i class="fas fa-rocket"></i> Interests</h3>
+          <ul>
+            <li>Autonomous Drones</li>
+            <li>Robotics & Automation</li>
+            <li id="space-interest" title="I wonder what's out there...">
+              Space & Astronomy <span class="easter-indicator" aria-hidden="true">✦</span>
+            </li>
+            <li>Open Source</li>
+          </ul>
+        </div>
       </div>
-      <div class="control-item">
-        <span class="key">ESC</span>
-        <span class="action">Return</span>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+      <h2 class="section-title">
+        <span class="title-icon">📬</span>
+        Get in Touch
+      </h2>
+      
+      <div class="contact-content">
+        <p>I'm always happy to discuss research collaborations, interesting projects, or opportunities. Feel free to reach out!</p>
+        
+        <div class="contact-grid">
+          <a href="mailto:l.kaesberg@uni-goettingen.de" class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <span>l.kaesberg@uni-goettingen.de</span>
+          </a>
+          
+          <a href="https://github.com/lkaesberg" target="_blank" class="contact-card">
+            <i class="fab fa-github"></i>
+            <span>github.com/lkaesberg</span>
+          </a>
+          
+          <a href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank" class="contact-card">
+            <i class="fab fa-linkedin"></i>
+            <span>LinkedIn</span>
+          </a>
+          
+          <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank" class="contact-card">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Google Scholar</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Lars Benedikt Kaesberg</p>
+    <p class="footer-secret-hint">✨ A little cosmic surprise is hidden on this page.</p>
+  </footer>
+
+  <!-- Easter Egg Modal -->
+  <div class="easter-egg-modal" id="easter-modal">
+    <div class="modal-content">
+      <h2>🚀 Secret Space Menu Unlocked!</h2>
+      <p>You found the hidden space easter egg. Choose your mission:</p>
+      <div class="modal-buttons">
+        <a href="space-game.html?v=20260403-game-page2" class="btn btn-primary" id="launch-space-game">
+          <i class="fas fa-rocket"></i> Space Defender Game
+        </a>
+        <a href="solar-system.html" class="btn btn-secondary" id="launch-solar-system">
+          <i class="fas fa-globe"></i> Solar System Fun Facts
+        </a>
+        <button class="btn btn-secondary" id="close-modal">
+          Maybe Later
+        </button>
       </div>
     </div>
   </div>
-  
-  <!-- Three.js Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
-  
-  <!-- GLTFLoader (for loading the rocket model) -->
-  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/GLTFLoader.js"></script>
-  
-  <!-- Application Scripts -->
-  <script type="module" src="js/main.js"></script>
+
+  <!-- Scripts -->
+  <script src="js/modern.js?v=20260403-main-fix3"></script>
 </body>
 </html>

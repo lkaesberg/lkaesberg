@@ -39,8 +39,6 @@ class UI {
     this.updateMobileUI();
     
     // Debug info
-    console.log('Menu toggle button:', this.menuToggle);
-    console.log('Nav menu:', this.navMenu);
   }
   
   // Initialize all event listeners
@@ -195,20 +193,6 @@ class UI {
         (overflowY === 'scroll' || overflowY === 'auto') && 
         element.scrollHeight > element.clientHeight
       ) {
-        const atTop = element.scrollTop === 0;
-        const atBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 10; // Add tolerance
-        
-        // Allow default scrolling behavior only if not at the boundaries
-        // or if scrolling in the direction away from the boundary
-        if (atTop && this.touchStartY < event.touches[0].clientY) {
-          // At top and trying to pull down further - prevent default
-          return false;
-        } else if (atBottom && this.touchStartY > event.touches[0].clientY) {
-          // At bottom and trying to pull up further - prevent default
-          return false;
-        }
-        
-        // Otherwise allow scrolling
         return true;
       }
       
