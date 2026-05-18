@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-05-13",
+  "lastUpdated": "2026-05-18",
   "stats": {
     "papers": 8,
-    "citations": 83,
+    "citations": 88,
     "hIndex": 5,
     "i10Index": 3
   },
@@ -12,7 +12,7 @@
       "authors": "Jonas Becker, Lars Benedikt Kaesberg, Andreas Stephan, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: EACL 2026",
       "year": 2026,
-      "citations": 11,
+      "citations": 12,
       "url": "https://aclanthology.org/2026.findings-eacl.268/",
       "type": "conference"
     },
@@ -39,7 +39,7 @@
       "authors": "Lars Benedikt Kaesberg, Jonas Becker, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
       "year": 2025,
-      "citations": 47,
+      "citations": 50,
       "url": "https://aclanthology.org/2025.findings-acl.606/",
       "type": "conference"
     },
@@ -57,7 +57,7 @@
       "authors": "Lars Benedikt Kaesberg, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "EMNLP 2025 (Main)",
       "year": 2025,
-      "citations": 5,
+      "citations": 6,
       "url": "https://aclanthology.org/2025.emnlp-main.526/",
       "type": "conference"
     },
