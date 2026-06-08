@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-06-01",
+  "lastUpdated": "2026-06-08",
   "stats": {
     "papers": 8,
-    "citations": 89,
+    "citations": 92,
     "hIndex": 5,
     "i10Index": 3
   },
@@ -39,7 +39,7 @@
       "authors": "Lars Benedikt Kaesberg, Jonas Becker, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
       "year": 2025,
-      "citations": 51,
+      "citations": 54,
       "url": "https://aclanthology.org/2025.findings-acl.606/",
       "type": "conference"
     },
