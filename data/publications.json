@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-06-29",
+  "lastUpdated": "2026-07-06",
   "stats": {
     "papers": 8,
-    "citations": 98,
+    "citations": 107,
     "hIndex": 5,
-    "i10Index": 3
+    "i10Index": 4
   },
   "publications": [
     {
@@ -12,7 +12,7 @@
       "authors": "Jonas Becker, Lars Benedikt Kaesberg, Andreas Stephan, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: EACL 2026",
       "year": 2026,
-      "citations": 15,
+      "citations": 18,
       "url": "https://aclanthology.org/2026.findings-eacl.268/",
       "type": "conference"
     },
@@ -39,7 +39,7 @@
       "authors": "Lars Benedikt Kaesberg, Jonas Becker, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
       "year": 2025,
-      "citations": 57,
+      "citations": 60,
       "url": "https://aclanthology.org/2025.findings-acl.606/",
       "type": "conference"
     },
@@ -48,7 +48,7 @@
       "authors": "Jonas Becker*, Lars Benedikt Kaesberg*, Niklas Bauer, Jan Philip Wahle, Terry Ruas, Bela Gipp (*equal contribution)",
       "venue": "EMNLP 2025 (Demo)",
       "year": 2025,
-      "citations": 11,
+      "citations": 12,
       "url": "https://aclanthology.org/2025.emnlp-demos.29/",
       "type": "conference"
     },
@@ -66,7 +66,7 @@
       "authors": "Lars Benedikt Kaesberg, Terry Ruas, Jan Philip Wahle, Bela Gipp",
       "venue": "Proceedings of the Fourth Workshop on Scholarly Document Processing (SDP @ ACL 2024)",
       "year": 2024,
-      "citations": 8,
+      "citations": 10,
       "url": "https://aclanthology.org/2024.sdp-1.10/",
       "type": "workshop"
     },
