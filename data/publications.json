@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-07-27",
+  "lastUpdated": "2026-08-03",
   "stats": {
-    "papers": 8,
-    "citations": 114,
+    "papers": 9,
+    "citations": 119,
     "hIndex": 5,
     "i10Index": 4
   },
@@ -12,9 +12,18 @@
       "authors": "Jonas Becker, Lars Benedikt Kaesberg, Andreas Stephan, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: EACL 2026",
       "year": 2026,
-      "citations": 19,
+      "citations": 21,
       "url": "https://aclanthology.org/2026.findings-eacl.268/",
       "type": "conference"
+    },
+    {
+      "title": "Multi-Agent Reasoning Improves Compute Efficiency: Pareto-Optimal Test-Time Scaling",
+      "authors": "F. Wunderlich, Lars Benedikt Kaesberg, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "venue": "",
+      "year": 2026,
+      "citations": 2,
+      "url": "https://www.semanticscholar.org/paper/8270cce88d00af08c5d448ccdbe1b12d83f152ba",
+      "type": "preprint"
     },
     {
       "title": "Mind the Gap Between Spatial Reasoning and Acting! Step-by-Step Evaluation of Agents With Spatial-Gym",
@@ -26,12 +35,12 @@
       "type": "preprint"
     },
     {
-      "title": "Multi-Agent Reasoning Improves Compute Efficiency: Pareto-Optimal Test-Time Scaling",
-      "authors": "F. Wunderlich, Lars Benedikt Kaesberg, Jan Philip Wahle, Terry Ruas, Bela Gipp",
+      "title": "Can Agents Deceive? Evaluating Reasoning and Deception in ParliamentBench using a Social Deduction Game",
+      "authors": "Niklas Bauer, Lars Benedikt Kaesberg, Akiko Aizawa, Jan Philip Wahle, Bela Gipp, Terry Ruas",
       "venue": "",
       "year": 2026,
-      "citations": 1,
-      "url": "https://www.semanticscholar.org/paper/8270cce88d00af08c5d448ccdbe1b12d83f152ba",
+      "citations": 0,
+      "url": "https://www.semanticscholar.org/paper/b2a37573ce3b5a2852fe739599422dbb70e06b12",
       "type": "preprint"
     },
     {
@@ -48,7 +57,7 @@
       "authors": "Jonas Becker*, Lars Benedikt Kaesberg*, Niklas Bauer, Jan Philip Wahle, Terry Ruas, Bela Gipp (*equal contribution)",
       "venue": "EMNLP 2025 (Demo)",
       "year": 2025,
-      "citations": 14,
+      "citations": 16,
       "url": "https://aclanthology.org/2025.emnlp-demos.29/",
       "type": "conference"
     },
