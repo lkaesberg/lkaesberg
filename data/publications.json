@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-07",
   "stats": {
     "papers": 10,
-    "citations": 140,
+    "citations": 142,
     "hIndex": 5,
     "i10Index": 4
   },
@@ -66,7 +66,7 @@
       "authors": "Jonas Becker*, Lars Benedikt Kaesberg*, Niklas Bauer, Jan Philip Wahle, Terry Ruas, Bela Gipp (*equal contribution)",
       "venue": "EMNLP 2025 (Demo)",
       "year": 2025,
-      "citations": 18,
+      "citations": 19,
       "url": "https://aclanthology.org/2025.emnlp-demos.29/",
       "type": "conference"
     },
@@ -84,7 +84,7 @@
       "authors": "Lars Benedikt Kaesberg, Terry Ruas, Jan Philip Wahle, Bela Gipp",
       "venue": "Proceedings of the Fourth Workshop on Scholarly Document Processing (SDP @ ACL 2024)",
       "year": 2024,
-      "citations": 13,
+      "citations": 14,
       "url": "https://aclanthology.org/2024.sdp-1.10/",
       "type": "workshop"
     },
