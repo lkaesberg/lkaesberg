@@ -59,56 +59,53 @@ const PublicationsLoader = {
     
     Object.entries(elements).forEach(([id, value]) => {
       const el = document.getElementById(id);
-      if (el) this.animateNumber(el, 0, value, 1000);
+      if (el) el.textContent = value;
     });
-  },
-  
-  animateNumber(element, start, end, duration) {
-    const startTime = performance.now();
-    
-    const update = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-      const current = Math.round(start + (end - start) * eased);
-      
-      element.textContent = current;
-      
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      }
-    };
-    
-    requestAnimationFrame(update);
   },
   
   renderPublications(publications) {
     const container = document.getElementById('publications-list');
     if (!container) return;
     
-    const html = publications.map(pub => this.createPublicationCard(pub)).join('');
-    container.innerHTML = html;
+    // Group by year, keeping the order from the data file (newest first)
+    const groups = [];
+    publications.forEach(pub => {
+      const year = pub.year || 'Other';
+      const last = groups[groups.length - 1];
+      if (last && last.year === year) {
+        last.items.push(pub);
+      } else {
+        groups.push({ year, items: [pub] });
+      }
+    });
+    
+    container.innerHTML = groups.map(group => `
+      <div class="pub-year-group">
+        <h3 class="pub-year">${group.year}</h3>
+        <ol class="pub-items">
+          ${group.items.map(pub => this.createPublicationCard(pub)).join('')}
+        </ol>
+      </div>
+    `).join('');
   },
   
   createPublicationCard(pub) {
     const authors = this.highlightAuthor(pub.authors, 'Lars');
-    const badgeType = this.getBadgeType(pub.type);
+    const venue = pub.venue || this.getBadgeType(pub.type);
+    const citations = pub.citations > 0
+      ? `<span class="publication-citations"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-quote"/></svg>${pub.citations}&nbsp;${pub.citations === 1 ? 'citation' : 'citations'}</span>`
+      : '';
     
     return `
-      <article class="publication-item">
-        <div class="publication-venue">
-          <span class="publication-badge">${badgeType}</span>
-          <span class="publication-year">${pub.year || 'N/A'}</span>
-        </div>
-        <h3 class="publication-title">
+      <li class="publication-item">
+        <h4 class="publication-title">
           ${pub.url ? `<a href="${pub.url}" target="_blank">${pub.title}</a>` : pub.title}
-        </h3>
+        </h4>
         <p class="publication-authors">${authors}</p>
-        <div class="publication-meta">
-          ${pub.venue ? `<span>${pub.venue}</span>` : ''}
-          ${pub.citations > 0 ? `<span class="publication-citations"><i class="fas fa-quote-right"></i> ${pub.citations} citations</span>` : ''}
-        </div>
-      </article>
+        <p class="publication-meta">
+          <span class="publication-venue">${venue}</span>${citations}
+        </p>
+      </li>
     `;
   },
   
@@ -136,13 +133,9 @@ const PublicationsLoader = {
     if (!container) return;
     
     container.innerHTML = `
-      <div class="publication-item">
-        <p>Unable to load publications. Please visit 
-          <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank">
-            Google Scholar
-          </a> for the latest list.
-        </p>
-      </div>
+      <p>The publication list didn't load. The full list is on
+        <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank">Google Scholar</a>.
+      </p>
     `;
   }
 };
@@ -204,7 +197,7 @@ const EasterEgg = {
       // Add subtle hint after first click
       const el = document.getElementById('space-interest');
       if (el && this.clickCount === 1) {
-        el.style.color = 'var(--accent-primary)';
+        el.style.color = 'var(--accent)';
         setTimeout(() => { el.style.color = ''; }, 300);
       } else if (el && this.clickCount === 2) {
         el.style.transform = 'scale(1.1)';
@@ -302,6 +295,265 @@ const NewsList = {
 };
 
 // ============================================
+// Project cards: on touch screens (no hover), the card in the
+// middle of the screen plays its scene
+// ============================================
+
+const ProjectScenes = {
+  init() {
+    const cards = document.querySelectorAll('.project-card');
+    if (!cards.length || window.matchMedia('(hover: hover)').matches || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => entry.target.classList.toggle('is-active', entry.isIntersecting));
+    }, { rootMargin: '-40% 0px -40% 0px' });
+
+    cards.forEach(card => observer.observe(card));
+  }
+};
+
+// ============================================
+// Background star field: three depth layers that drift very slowly,
+// shift a little with the cursor (parallax) and with scrolling, and
+// brighten softly around the pointer. The stars inside the portrait's
+// window read the same pointer position so they sit at their own depth.
+// ============================================
+
+const Starfield = {
+  init() {
+    const canvas = document.querySelector('.space-canvas');
+    if (!canvas || !canvas.getContext) return;
+
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.portrait = document.querySelector('.portrait');
+    this.lastPx = null;
+    this.still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.pointer = { x: 0, y: 0, tx: 0, ty: 0, px: -1e4, py: -1e4 };
+    this.meteor = null;
+    this.nextMeteor = performance.now() + 6000 + Math.random() * 8000;
+
+    this.readTheme();
+    this.resize();
+
+    window.addEventListener('resize', () => this.resize());
+    new MutationObserver(() => { this.readTheme(); this.draw(performance.now()); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    if (this.still) {
+      this.draw(0);
+      return;
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      this.pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
+      this.pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+      this.pointer.px = e.clientX;
+      this.pointer.py = e.clientY;
+    }, { passive: true });
+    window.addEventListener('mouseout', (e) => {
+      if (e.relatedTarget) return;
+      this.pointer.tx = 0;
+      this.pointer.ty = 0;
+      this.pointer.px = -1e4;
+      this.pointer.py = -1e4;
+    });
+
+    const loop = (t) => {
+      if (!document.hidden) this.draw(t);
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  },
+
+  readTheme() {
+    const css = getComputedStyle(document.documentElement);
+    this.color = css.getPropertyValue('--sky-star').trim() || '#18213a';
+    this.alpha = parseFloat(css.getPropertyValue('--sky-opacity')) || 0.3;
+    this.dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  },
+
+  resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.w = window.innerWidth;
+    this.h = window.innerHeight;
+    this.canvas.width = Math.round(this.w * dpr);
+    this.canvas.height = Math.round(this.h * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Star count follows the screen area; most stars are small and far away
+    const count = Math.round((this.w * this.h) / 2600);
+    this.stars = Array.from({ length: count }, () => {
+      const depth = Math.random() < 0.6 ? 0.25 : (Math.random() < 0.7 ? 0.55 : 1);
+      const m = Math.random();
+      return {
+        x: Math.random() * this.w,
+        y: Math.random() * this.h,
+        depth,
+        r: (0.25 + 0.95 * m ** 3) * (0.65 + depth * 0.4),
+        a: 0.25 + 0.75 * m,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.0004 + Math.random() * 0.0012,
+        twinkles: Math.random() < 0.18
+      };
+    });
+
+    this.draw(performance.now());
+  },
+
+  draw(t) {
+    const { ctx, w, h, pointer } = this;
+    if (!ctx) return;
+
+    // Ease toward the cursor so the sky floats rather than jumps
+    pointer.x += (pointer.tx - pointer.x) * 0.045;
+    pointer.y += (pointer.ty - pointer.y) * 0.045;
+    const px = `${pointer.x.toFixed(3)},${pointer.y.toFixed(3)}`;
+    if (this.portrait && px !== this.lastPx) {
+      this.portrait.style.setProperty('--px', pointer.x.toFixed(3));
+      this.portrait.style.setProperty('--py', pointer.y.toFixed(3));
+      this.lastPx = px;
+    }
+
+    const scroll = window.scrollY;
+    const drift = this.still ? 0 : t * 0.004;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = this.color;
+
+    for (const star of this.stars) {
+      const shift = 14 * star.depth;
+      let x = star.x - pointer.x * shift - drift * star.depth;
+      let y = star.y - pointer.y * shift - scroll * 0.04 * star.depth;
+      x = ((x % w) + w) % w;
+      y = ((y % h) + h) % h;
+
+      let a = star.a;
+      if (star.twinkles && !this.still) a *= 0.55 + 0.45 * Math.sin(t * star.speed + star.phase);
+
+      // Stars near the cursor glow a little brighter
+      const d = Math.hypot(x - pointer.px, y - pointer.py);
+      const near = d < 150 ? 1 - d / 150 : 0;
+
+      ctx.globalAlpha = Math.min(1, (a + near * 0.6) * this.alpha);
+      ctx.beginPath();
+      ctx.arc(x, y, star.r * (1 + near * 0.6), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Every now and then, a faint shooting star
+    if (!this.still) this.drawMeteor(t);
+    ctx.globalAlpha = 1;
+  },
+
+  drawMeteor(t) {
+    const { ctx, w, h } = this;
+    if (!this.meteor && t > this.nextMeteor) {
+      this.meteor = { x: w * (0.15 + Math.random() * 0.5), y: h * (0.05 + Math.random() * 0.3), start: t };
+    }
+    if (!this.meteor) return;
+
+    const p = (t - this.meteor.start) / 900;
+    if (p >= 1) {
+      this.meteor = null;
+      this.nextMeteor = t + 14000 + Math.random() * 12000;
+      return;
+    }
+    const len = 120;
+    const x = this.meteor.x + p * 260;
+    const y = this.meteor.y + p * 90;
+    const grad = ctx.createLinearGradient(x - len, y - len * 0.35, x, y);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, this.color);
+    ctx.globalAlpha = Math.sin(p * Math.PI) * (this.dark ? 0.7 : 0.3);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x - len, y - len * 0.35);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.strokeStyle = this.color;
+  }
+};
+
+// ============================================
+// Fly-by: every so often something small crosses the sky.
+// Clicking it opens the hidden space menu.
+// ============================================
+
+const Flyby = {
+  kinds: ['rocket', 'rocket', 'satellite', 'satellite', 'ufo'],
+
+  init() {
+    this.el = document.querySelector('.flyby');
+    if (!this.el || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !this.el.animate) return;
+
+    this.el.addEventListener('click', () => EasterEgg.showModal());
+    this.schedule(9000 + Math.random() * 6000);
+  },
+
+  schedule(ms) {
+    setTimeout(() => this.fly(), ms);
+  },
+
+  fly() {
+    if (document.hidden) {
+      this.schedule(5000);
+      return;
+    }
+
+    const kind = this.kinds[Math.floor(Math.random() * this.kinds.length)];
+    const icon = kind === 'rocket' ? 'rocket' : kind;
+    this.el.innerHTML = `<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-${icon}"/></svg>`;
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const leftToRight = Math.random() < 0.5;
+    const x0 = leftToRight ? -40 : w + 40;
+    const x1 = leftToRight ? w + 40 : -40;
+    // Stay below the sticky top bar and above the bottom edge
+    const y0 = h * (0.22 + Math.random() * 0.56);
+    const y1 = Math.min(h * 0.85, Math.max(h * 0.22, y0 + (Math.random() - 0.5) * h * 0.4));
+    const heading = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
+    const duration = { rocket: 13000, satellite: 24000, ufo: 9000 }[kind];
+
+    const frames = [];
+    for (let i = 0; i <= 24; i++) {
+      const t = i / 24;
+      const x = x0 + (x1 - x0) * t;
+      const y = y0 + (y1 - y0) * t + (kind === 'ufo' ? Math.sin(t * Math.PI * 5) * 12 : 0);
+      // The rocket icon points up, so turn it to face its heading; the satellite tumbles slowly
+      const rotate = kind === 'rocket' ? heading + 90 : kind === 'satellite' ? t * 140 : Math.sin(t * Math.PI * 5) * 8;
+      const opacity = t < 0.08 ? t / 0.08 : t > 0.92 ? (1 - t) / 0.08 : 1;
+      frames.push({ transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${rotate.toFixed(1)}deg)`, opacity });
+    }
+
+    this.el.hidden = false;
+    const run = this.el.animate(frames, { duration, easing: 'linear', fill: 'forwards' });
+    run.onfinish = () => {
+      this.el.hidden = true;
+      this.schedule(25000 + Math.random() * 20000);
+    };
+  }
+};
+
+// ============================================
+// Sticky top bar: show its bottom line once the page is scrolled
+// ============================================
+
+const TopBar = {
+  init() {
+    const bar = document.querySelector('.topbar');
+    if (!bar) return;
+
+    const update = () => bar.classList.toggle('is-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+};
+
+// ============================================
 // Initialize
 // ============================================
 
@@ -311,4 +563,8 @@ document.addEventListener('DOMContentLoaded', () => {
   PublicationsLoader.init();
   EasterEgg.init();
   SmoothScroll.init();
+  ProjectScenes.init();
+  TopBar.init();
+  Starfield.init();
+  Flyby.init();
 });
