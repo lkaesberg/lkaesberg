@@ -4,139 +4,180 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lars Benedikt Kaesberg – NLP & AI Researcher</title>
-  
+
   <!-- SEO Meta -->
   <meta name="description" content="Lars Benedikt Kaesberg is a doctoral researcher at the University of Göttingen specializing in Natural Language Processing, Multi-Agent Systems, and AI.">
   <meta name="keywords" content="Lars Kaesberg, NLP, AI, Machine Learning, University of Göttingen, Multi-Agent Systems, Research">
   <meta name="author" content="Lars Benedikt Kaesberg">
-  
+
   <!-- Open Graph -->
   <meta property="og:title" content="Lars Benedikt Kaesberg – NLP & AI Researcher">
   <meta property="og:description" content="Doctoral researcher specializing in NLP, Multi-Agent Systems, and AI at the University of Göttingen.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://lkaesberg.de">
-  <meta property="og:image" content="images/profile.jpg">
-  
+  <meta property="og:image" content="https://lkaesberg.de/images/profile.jpg">
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
   <link rel="shortcut icon" href="/favicon/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
-  
+
+  <!-- Apply saved theme before first paint -->
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('theme');
+        if (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+        if (theme) document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500..700&family=Jost:wght@300..700&display=swap" rel="stylesheet">
+
   <!-- Styles -->
-  <link rel="stylesheet" href="css/modern.css?v=20260403-main-fix3">
+  <link rel="stylesheet" href="css/modern.css?v=20261018k">
 </head>
 <body>
-  <!-- Theme Toggle - Animated Sun/Moon -->
-  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-    <div class="theme-toggle-inner">
-      <div class="sun-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="12" r="5"/>
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-        </svg>
-      </div>
-      <div class="moon-icon"></div>
-      <div class="moon-stars">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </button>
+  <!-- Icon set: thin rounded line icons plus brand marks, used via <use href="#i-..."> -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></symbol>
+    <symbol id="i-scholar" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></symbol>
+    <symbol id="i-news" viewBox="0 0 24 24"><path d="M4 5h12v13a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M16 9h4v9a2 2 0 0 1-4 0"/><path d="M7.5 9h5M7.5 12.5h5M7.5 16h3"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5.5c3-1.4 6-1.2 9 1 3-2.2 6-2.4 9-1V19c-3-1.4-6-1.2-9 1-3-2.2-6-2.4-9-1z"/><path d="M12 6.5V20"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 2.5c3 2 4.5 5.5 4.5 9.5v4h-9v-4c0-4 1.5-7.5 4.5-9.5z"/><circle cx="12" cy="10" r="1.8"/><path d="M7.5 13l-3 3v3.5l3-1.5M16.5 13l3 3v3.5l-3-1.5"/><path d="M10 19.5c.5 1.3 1.2 2 2 2.5.8-.5 1.5-1.2 2-2.5"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M15.8 8.2l-2.1 5.5-5.5 2.1 2.1-5.5z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5L4.5 13.5H11l-1 8 8.5-11H12z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21.5 2.5l-11 11"/><path d="M21.5 2.5l-7 19-4-8-8-4z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.6 13.9l-1.1 7.6 4.5-2.5 4.5 2.5-1.1-7.6"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V7"/><path d="M3 12.5h18"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path d="M6.5 11.6V16c0 1.5 2.5 3 5.5 3s5.5-1.5 5.5-3v-4.4"/><path d="M21.5 9.5v5"/></symbol>
+    <symbol id="i-present" viewBox="0 0 24 24"><path d="M3 4h18"/><path d="M4.5 4v10a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V4"/><path d="M12 15.5v3"/><path d="M8.5 21.5l3.5-3 3.5 3"/><path d="M8 11l2.5-2.5 2 2L16 7"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M9.5 7H5v5h4.5v1c0 2-1.2 3.6-3.5 4.5"/><path d="M19 7h-4.5v5H19v1c0 2-1.2 3.6-3.5 4.5"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6"/><path d="M10 3v6.2L4.6 18.3A1.8 1.8 0 0 0 6.2 21h11.6a1.8 1.8 0 0 0 1.6-2.7L14 9.2V3"/><path d="M7.2 15h9.6"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 7.5L4 12l4.5 4.5"/><path d="M15.5 7.5L20 12l-4.5 4.5"/><path d="M13.5 5l-3 14"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9.5 2.5V6M14.5 2.5V6M9.5 18v3.5M14.5 18v3.5M2.5 9.5H6M2.5 14.5H6M18 9.5h3.5M18 14.5h3.5"/></symbol>
+    <symbol id="i-satellite" viewBox="0 0 24 24"><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M2 10h6v4H2zM16 10h6v4h-6zM5 10v4M19 10v4M8 12h1.5M14.5 12H16M12 9.5V7"/><circle class="blink" cx="12" cy="5.8" r="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-ufo" viewBox="0 0 24 24"><path d="M8.5 12.5a3.5 3.5 0 0 1 7 0"/><ellipse cx="12" cy="14" rx="9.5" ry="3"/><circle cx="7.5" cy="14.3" r=".6" fill="currentColor"/><circle cx="12" cy="15" r=".6" fill="currentColor"/><circle cx="16.5" cy="14.3" r=".6" fill="currentColor"/></symbol>
+    <symbol id="i-telescope" viewBox="0 0 24 24"><path d="M3.4 14.2l12.2-6.1 1.9 3.8-12.2 6.1z"/><path d="M15.6 8.1l3.2-1.6 1.9 3.8-3.2 1.6"/><path d="M11 15.1l-2.8 6.4M11 15.1l2.8 6.4"/></symbol>
+  </svg>
+
+  <!-- Background sky: a canvas star field that drifts and follows the cursor (js/modern.js) -->
+  <div class="space" aria-hidden="true">
+    <canvas class="space-canvas"></canvas>
+  </div>
+  <!-- Something small flies through now and then; clicking it opens the space menu -->
+  <div class="flyby" hidden></div>
+
 
   <!-- Easter Egg Trigger (hidden in footer copyright - click 3 times) -->
   <div id="easter-trigger" style="display:none;"></div>
 
-  <!-- Main Content -->
+  <header class="topbar">
+    <a class="topbar-name" href="#">Lars Kaesberg</a>
+    <nav class="topbar-nav" aria-label="Sections">
+      <a href="#news">News</a>
+      <a href="#publications">Publications</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
+  </header>
+
   <main class="container">
-    <!-- Hero Section -->
+    <!-- Hero -->
     <header class="hero">
-      <div class="hero-content">
-        <div class="hero-image">
-          <img src="images/profile.jpg" alt="Lars Benedikt Kaesberg" class="avatar">
-          <div class="status-indicator"></div>
-        </div>
-        
-        <div class="hero-text">
-          <h1>Lars Benedikt Kaesberg</h1>
-          <p class="tagline">Doctoral Researcher in Natural Language Processing</p>
-          
-          <p class="bio">
-            I'm a doctoral researcher at the <a href="https://www.uni-goettingen.de/en/1.html" target="_blank">University of Göttingen</a> 
-            focusing on spatial reasoning with large language models. My research explores how LLMs understand and navigate 
-            spatial environments, particularly through projects like <a href="https://sparc.gipplab.org/" target="_blank">SPaRC</a> and <a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank">Spatial Gym</a>.
-          </p>
-          
-          <div class="hero-links">
-            <a href="mailto:l.kaesberg@uni-goettingen.de" class="btn btn-primary">
-              <i class="fas fa-envelope"></i> Contact
-            </a>
-            <a href="https://github.com/lkaesberg" target="_blank" class="btn btn-secondary">
-              <i class="fab fa-github"></i> GitHub
-            </a>
-            <a href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank" class="btn btn-secondary">
-              <i class="fab fa-linkedin"></i> LinkedIn
-            </a>
-            <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank" class="btn btn-secondary">
-              <i class="fas fa-graduation-cap"></i> Scholar
-            </a>
+      <div class="hero-name">
+        <p class="note note-hi" aria-hidden="true">Hi, I'm</p>
+        <h1>Lars Benedikt Kaesberg</h1>
+        <p class="tagline">Doctoral researcher in natural language processing</p>
+        <svg class="doodle doodle-star doodle-star-a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.3 6.6 1.6 9.2 10 10-8.3.9-9.6 3.4-10 10-.5-6.5-1.8-9.1-10-10 8.2-.8 9.6-3.5 10-10z"/></svg>
+      </div>
+
+      <figure class="hero-photo">
+        <div class="portrait">
+          <div class="portrait-sky" aria-hidden="true">
+            <svg class="portrait-stars" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <circle cx="3.2" cy="12.8" r="0.21" opacity="0.59"/><circle cx="67.7" cy="15.3" r="0.18" opacity="0.42"/><circle cx="24.3" cy="74.7" r="0.18" opacity="0.44"/><circle cx="73.1" cy="65.6" r="0.18" opacity="0.43"/><circle cx="53.4" cy="45.0" r="0.21" opacity="0.60"/><circle cx="97.6" cy="10.9" r="0.18" opacity="0.36"/><circle cx="92.2" cy="40.7" r="0.18" opacity="0.47"/><circle cx="33.7" cy="37.0" r="0.55" opacity="0.92"/><circle cx="22.2" cy="22.8" r="0.26" opacity="0.70"/><circle cx="54.5" cy="93.6" r="0.43" opacity="0.85"/><circle cx="36.1" cy="21.6" r="0.43" opacity="0.85"/><circle cx="72.6" cy="85.4" r="0.30" opacity="0.74"/><circle cx="63.5" cy="23.0" r="0.18" opacity="0.37"/><circle cx="40.0" cy="64.1" r="0.43" opacity="0.85"/><circle cx="94.3" cy="95.7" r="0.59" opacity="0.95"/><circle cx="77.8" cy="31.4" r="0.18" opacity="0.46"/><circle cx="61.9" cy="54.4" r="0.31" opacity="0.75"/><circle cx="11.0" cy="20.5" r="0.51" opacity="0.90"/><circle cx="59.7" cy="68.8" r="0.18" opacity="0.41"/><circle cx="40.3" cy="89.4" r="0.29" opacity="0.74"/><circle cx="97.2" cy="20.9" r="0.22" opacity="0.62"/><circle cx="78.9" cy="44.7" r="0.39" opacity="0.82"/><circle cx="55.9" cy="13.3" r="0.18" opacity="0.41"/><circle cx="20.6" cy="34.2" r="0.33" opacity="0.78"/><circle cx="49.8" cy="77.7" r="0.19" opacity="0.52"/><circle cx="63.1" cy="5.7" r="0.18" opacity="0.42"/><circle cx="15.2" cy="71.6" r="0.32" opacity="0.77"/><circle cx="95.4" cy="75.7" r="0.19" opacity="0.50"/><circle cx="75.5" cy="96.6" r="0.20" opacity="0.56"/><circle cx="3.1" cy="38.0" r="0.19" opacity="0.52"/><circle cx="18.9" cy="6.3" r="0.18" opacity="0.42"/><circle cx="85.1" cy="6.8" r="0.28" opacity="0.72"/><circle cx="19.6" cy="45.7" r="0.32" opacity="0.77"/><circle cx="52.3" cy="84.5" r="0.21" opacity="0.59"/><circle cx="52.3" cy="70.8" r="0.22" opacity="0.63"/><circle cx="70.8" cy="46.8" r="0.18" opacity="0.43"/><circle cx="68.3" cy="57.7" r="0.18" opacity="0.45"/><circle cx="42.8" cy="15.5" r="0.20" opacity="0.58"/><circle cx="5.2" cy="61.0" r="0.48" opacity="0.89"/><circle cx="40.5" cy="80.5" r="0.20" opacity="0.58"/><circle cx="28.6" cy="19.4" r="0.18" opacity="0.37"/><circle cx="48.3" cy="30.5" r="0.22" opacity="0.63"/><circle cx="2.5" cy="2.0" r="0.20" opacity="0.58"/><circle cx="89.6" cy="57.6" r="0.21" opacity="0.59"/><circle cx="76.6" cy="24.4" r="0.27" opacity="0.71"/><circle cx="83.3" cy="53.9" r="0.19" opacity="0.54"/>
+              <path d="M14 9v5M11.5 11.5h5M83 22v4.4M80.8 24.2h4.4M90 62v3.6M88.2 63.8h3.6" fill="none" stroke="#ffffff" stroke-width="0.35" stroke-linecap="round" opacity="0.8"/>
+            </svg>
           </div>
+          <div class="portrait-arch">
+            <img src="images/portrait.webp?v=20261018" alt="Portrait of Lars Benedikt Kaesberg" width="760" height="722">
+          </div>
+          <img class="portrait-head" src="images/portrait.webp?v=20261018" alt="" aria-hidden="true" width="760" height="722">
         </div>
+        <p class="note note-me" aria-hidden="true">
+          that's me!
+          <svg class="doodle doodle-arrow" viewBox="0 0 80 56"><path class="draw" pathLength="1" d="M4 50c7-19 25-35 62-38"/><path class="draw draw-head" pathLength="1" d="M55 4l12 8-10 10"/></svg>
+        </p>
+        <svg class="doodle doodle-star doodle-star-b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.3 6.6 1.6 9.2 10 10-8.3.9-9.6 3.4-10 10-.5-6.5-1.8-9.1-10-10 8.2-.8 9.6-3.5 10-10z"/></svg>
+        <svg class="doodle doodle-star doodle-star-c" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.3 6.6 1.6 9.2 10 10-8.3.9-9.6 3.4-10 10-.5-6.5-1.8-9.1-10-10 8.2-.8 9.6-3.5 10-10z"/></svg>
+      </figure>
+
+      <div class="hero-intro">
+        <p class="bio">
+          I'm a doctoral researcher at the <a href="https://www.uni-goettingen.de/en/1.html" target="_blank">University of Göttingen</a>
+          focusing on spatial reasoning with large language models. My research explores how LLMs understand and navigate
+          spatial environments, particularly through projects like <a href="https://sparc.gipplab.org/" target="_blank">SPaRC</a> and <a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank">Spatial Gym</a>.
+        </p>
+
+        <ul class="hero-links">
+          <li><a class="chip" href="mailto:l.kaesberg@uni-goettingen.de"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>Email</span></a></li>
+          <li><a class="chip" href="https://github.com/lkaesberg" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><span>GitHub</span></a></li>
+          <li><a class="chip" href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></li>
+          <li><a class="chip" href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-scholar"/></svg><span>Google Scholar</span></a></li>
+        </ul>
       </div>
     </header>
 
     <!-- News Section -->
     <section class="section" id="news">
-      <h2 class="section-title">
-        <span class="title-icon">📰</span>
-        News
-      </h2>
-      
+      <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-news"/></svg>News</h2>
+
       <div class="news-list" id="news-list">
         <article class="news-item">
           <time class="news-date">Nov 2025</time>
-          <span class="news-icon">✈️</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>
           <p>Attended <a href="https://2025.emnlp.org/" target="_blank">EMNLP 2025</a> in Suzhou, China to present <a href="https://aclanthology.org/2025.emnlp-main.526/" target="_blank">SPaRC</a> and <a href="https://aclanthology.org/2025.emnlp-demos.29/" target="_blank">MALLM</a>.</p>
         </article>
-        
+
         <article class="news-item">
           <time class="news-date">Jul 2025</time>
-          <span class="news-icon">🏆</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-award"/></svg>
           <p>Our work on <a href="https://mallm.gipplab.org/" target="_blank">multi-agent debate decision-making</a> was accepted at ACL 2025 Findings!</p>
         </article>
 
         <article class="news-item">
           <time class="news-date">Jan 2025</time>
-          <span class="news-icon">🎓</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg>
           <p>Started as a doctoral researcher at the University of Göttingen, focusing on multi-agent systems and NLP.</p>
         </article>
-        
+
         <article class="news-item">
           <time class="news-date">Dec 2024</time>
-          <span class="news-icon">🎓</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-cap"/></svg>
           <p>Completed my Master's thesis on "Decision Protocols in Multi-Agent LLM Conversations".</p>
         </article>
-        
+
         <article class="news-item">
           <time class="news-date">Aug 2024</time>
-          <span class="news-icon">✈️</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>
           <p>Attended <a href="https://2024.aclweb.org/" target="_blank">ACL 2024</a> in Bangkok, Thailand to present <a href="https://aclanthology.org/2024.sdp-1.10/" target="_blank">CiteAssist</a> at the SDP Workshop.</p>
         </article>
-        
+
         <article class="news-item">
           <time class="news-date">Jun 2024</time>
-          <span class="news-icon">🦌</span>
+          <svg class="icon news-icon" aria-hidden="true" focusable="false"><use href="#i-present"/></svg>
           <p>Presented <a href="https://fawnrescue.github.io/" target="_blank">FawnRescue</a> drone project at IdeenExpo 2024.</p>
         </article>
       </div>
@@ -147,37 +188,15 @@
 
     <!-- Publications Section -->
     <section class="section" id="publications">
-      <h2 class="section-title">
-        <span class="title-icon">📚</span>
-        Publications
-      </h2>
-      
+      <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-book"/></svg>Publications</h2>
+
       <p class="section-intro">
-        My research focuses on multi-agent systems, decision-making in LLMs, and spatial reasoning. 
-        Find all my publications on <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank">Google Scholar</a>.
+        My research focuses on multi-agent systems, decision-making in LLMs, and spatial reasoning.
+        I have published <span id="stat-papers">8</span> papers so far, cited <span id="stat-citations">83</span> times
+        (h-index <span id="stat-hindex">5</span>, i10-index <span id="stat-i10">3</span>).
+        The full list is on <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank">Google Scholar</a>.
       </p>
-      
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-number" id="stat-papers">7</span>
-          <span class="stat-label">Papers</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number" id="stat-citations">60</span>
-          <span class="stat-label">Citations</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number" id="stat-hindex">3</span>
-          <span class="stat-label">h-index</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number" id="stat-i10">2</span>
-          <span class="stat-label">i10-index</span>
-        </div>
-      </div>
-      
-      <!-- Publication List -->
+
       <div class="publications-list" id="publications-list">
         <!-- Publications will be loaded dynamically -->
       </div>
@@ -185,288 +204,432 @@
 
     <!-- Projects Section -->
     <section class="section" id="projects">
-      <h2 class="section-title">
-        <span class="title-icon">🛠️</span>
-        Projects
-      </h2>
+      <div class="section-head">
+        <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg>Projects</h2>
+        <p class="note note-hover" aria-hidden="true">
+          hover over them!
+          <svg class="doodle doodle-arrow-down" viewBox="0 0 70 56"><path d="M60 4c6 20-6 38-34 44"/><path d="M36 38l-11 10 13 5"/></svg>
+        </p>
+      </div>
       
       <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-icon">🧭</div>
-          <h3>SPaRC</h3>
-          <p>Spatial Pathfinding Reasoning Challenge - A benchmark for evaluating AI spatial reasoning in maze navigation tasks.</p>
-          <div class="project-tags">
-            <span class="tag">Benchmark</span>
-            <span class="tag">LLM</span>
-            <span class="tag">Spatial Reasoning</span>
+        <article class="project-card is-wide" data-scene="sparc">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <rect x="116" y="16" width="168" height="132" rx="12" fill="#12301f"/>
+              <path d="M128 28V136M164 28V136M200 28V136M236 28V136M272 28V136M128 28H272M128 64H272M128 100H272M128 136H272M272 28V8" fill="none" stroke="#2b5a45" stroke-width="10" stroke-linecap="round"/>
+              <g fill="#2e9e6b"><rect x="137" y="37" width="18" height="18" rx="3"/><rect x="173" y="37" width="18" height="18" rx="3"/><rect x="209" y="37" width="18" height="18" rx="3"/><rect x="245" y="37" width="18" height="18" rx="3"/><rect x="137" y="73" width="18" height="18" rx="3"/><rect x="173" y="73" width="18" height="18" rx="3"/><rect x="209" y="73" width="18" height="18" rx="3"/><rect x="245" y="73" width="18" height="18" rx="3"/><rect x="137" y="109" width="18" height="18" rx="3"/><rect x="173" y="109" width="18" height="18" rx="3"/><rect x="209" y="109" width="18" height="18" rx="3"/><rect x="245" y="109" width="18" height="18" rx="3"/></g>
+              <rect x="140" y="76" width="12" height="12" rx="2" fill="#f2c230"/>
+              <rect x="248" y="112" width="12" height="12" rx="2" fill="#ffffff"/>
+              <path d="M182 42l4 8h-8zM141 113l4 8h-8zM151 113l4 8h-8z" fill="#0f2a1f"/>
+              <circle cx="128" cy="136" r="8" fill="#ffffff"/>
+              <path class="sparc-path" pathLength="1" d="M128 136H164V64H236V100H272V28V8" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
-          <a href="https://sparc.gipplab.org/" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Website
-          </a>
+          <div class="card-body">
+            <h3><a href="https://sparc.gipplab.org/" target="_blank">SPaRC</a></h3>
+            <p>Spatial Pathfinding Reasoning Challenge - A benchmark for evaluating AI spatial reasoning in maze navigation tasks.</p>
+            <ul class="project-tags">
+              <li>Benchmark</li>
+              <li>LLM</li>
+              <li>Spatial Reasoning</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">🏋️</div>
-          <h3>Spatial Gym</h3>
-          <p>Training environment for spatial reasoning with LLMs. Generates diverse navigation tasks for model fine-tuning.</p>
-          <div class="project-tags">
-            <span class="tag">Training</span>
-            <span class="tag">LLM</span>
-            <span class="tag">Python</span>
+
+        <article class="project-card" data-scene="gym">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <path d="M20 0V160M40 0V160M60 0V160M80 0V160M100 0V160M120 0V160M140 0V160M160 0V160M180 0V160M200 0V160M220 0V160M240 0V160M260 0V160M280 0V160M300 0V160M320 0V160M340 0V160M360 0V160M380 0V160M0 20H400M0 40H400M0 60H400M0 80H400M0 100H400M0 120H400M0 140H400" stroke="#2a3a6e" stroke-width="1"/>
+              <path d="M70 20V100M150 90V150M250 20V80M330 60V150M20 60H60M170 130H230" stroke="#8fa6ff" stroke-width="4" stroke-linecap="round"/>
+              <rect x="361" y="21" width="18" height="18" rx="4" fill="none" stroke="#ffd25e" stroke-width="2.5"/>
+              <circle cx="30" cy="130" r="11" fill="none" stroke="#ffd25e" stroke-width="2" opacity="0.45"/>
+              <path class="gym-trail" pathLength="1" d="M30 130H110V50H210V110H290V30H370" fill="none" stroke="#ffd25e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+              <circle class="gym-agent" r="7" fill="#ffd25e"/>
+            </svg>
           </div>
-          <a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank" class="project-link">
-            <i class="fab fa-github"></i> GitHub
-          </a>
+          <div class="card-body">
+            <h3><a href="https://github.com/lkaesberg/Spatial-Gym" target="_blank">Spatial Gym</a></h3>
+            <p>Training environment for spatial reasoning with LLMs. Generates diverse navigation tasks for model fine-tuning.</p>
+            <ul class="project-tags">
+              <li>Training</li>
+              <li>LLM</li>
+              <li>Python</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">✉️</div>
-          <h3>EmailBot</h3>
-          <p>Discord bot for email verification with 56+ stars. Used by university communities for member validation.</p>
-          <div class="project-tags">
-            <span class="tag">JavaScript</span>
-            <span class="tag">Discord</span>
-            <span class="tag">Bot</span>
+
+        <article class="project-card" data-scene="mallm">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <circle cx="36" cy="36" r="13" fill="#2442b8"/>
+              <circle cx="36" cy="118" r="13" fill="#e0533f"/>
+              <circle cx="364" cy="77" r="13" fill="#18213a"/>
+              <g class="bubble bubble-1">
+                <rect x="58" y="21" width="168" height="30" rx="15" fill="#ffffff"/>
+                <rect x="74" y="34" width="96" height="5" rx="2.5" fill="#c3cbe3"/>
+                <rect x="176" y="34" width="34" height="5" rx="2.5" fill="#2442b8" opacity="0.5"/>
+              </g>
+              <g class="bubble bubble-2">
+                <rect x="172" y="62" width="170" height="30" rx="15" fill="#18213a"/>
+                <rect x="188" y="75" width="60" height="5" rx="2.5" fill="#5d6886"/>
+                <rect x="254" y="75" width="70" height="5" rx="2.5" fill="#5d6886"/>
+              </g>
+              <g class="bubble bubble-3">
+                <rect x="58" y="103" width="140" height="30" rx="15" fill="#ffffff"/>
+                <rect x="74" y="116" width="108" height="5" rx="2.5" fill="#c3cbe3"/>
+              </g>
+              <g class="bubble bubble-4">
+                <rect x="226" y="105" width="116" height="26" rx="13" fill="#2e9e6b"/>
+                <path d="M240 118l5 5 9-10" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="262" y="122" fill="#ffffff" font-size="12" font-weight="500">consensus</text>
+              </g>
+            </svg>
           </div>
-          <a href="https://emailbot.larskaesberg.de/" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Website
-          </a>
+          <div class="card-body">
+            <h3><a href="https://github.com/gipplab/MALLM" target="_blank">MALLM</a></h3>
+            <p>Multi-Agent Large Language Model framework for collaborative AI reasoning and debate systems.</p>
+            <ul class="project-tags">
+              <li>LLM</li>
+              <li>Multi-Agent</li>
+              <li>Python</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">🍽️</div>
-          <h3>AI Mensa</h3>
-          <p>Fun app that generates AI images of daily meals in Göttingen university canteens. See what your food might look like!</p>
-          <div class="project-tags">
-            <span class="tag">AI</span>
-            <span class="tag">Image Gen</span>
-            <span class="tag">Web</span>
+
+        <article class="project-card" data-scene="cite">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <rect class="cite-mark" x="134" y="23" width="168" height="17" rx="2" fill="#f6d36b"/>
+              <g class="cite-code" font-size="12.5">
+                <text class="cite-line" x="22" y="36"><tspan fill="#2442b8">@inproceedings</tspan>{kaesberg2024citeassist,</text>
+                <text class="cite-line" x="22" y="56"><tspan fill="#7a8399">  title  </tspan>= {CiteAssist: A System for ...},</text>
+                <text class="cite-line" x="22" y="76"><tspan fill="#7a8399">  author </tspan>= {Kaesberg, Lars Benedikt and ...},</text>
+                <text class="cite-line" x="22" y="96"><tspan fill="#7a8399">  venue  </tspan>= {SDP @ ACL},</text>
+                <text class="cite-line" x="22" y="116"><tspan fill="#7a8399">  year   </tspan>= {2024}</text>
+                <text class="cite-line" x="22" y="136">}</text>
+              </g>
+            </svg>
           </div>
-          <a href="https://mensa.larskaesberg.de/" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Try it
-          </a>
+          <div class="card-body">
+            <h3><a href="https://citeassist.uni-goettingen.de" target="_blank">CiteAssist</a></h3>
+            <p>ACL-published web service that auto-generates BibTeX citations for arXiv and other preprint servers.</p>
+            <ul class="project-tags">
+              <li>NLP</li>
+              <li>Python</li>
+              <li>Web</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">🦌</div>
-          <h3>FawnRescue</h3>
-          <p>Open-hardware drone with thermal camera and YOLO-based detection for rescuing fawns from agricultural machines.</p>
-          <div class="project-tags">
-            <span class="tag">Python</span>
-            <span class="tag">YOLO</span>
-            <span class="tag">Drone</span>
+
+        <article class="project-card" data-scene="fawn">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <radialGradient id="heat">
+                  <stop offset="0" stop-color="#fff6c2"/>
+                  <stop offset="0.3" stop-color="#ffc23d"/>
+                  <stop offset="0.62" stop-color="#ff6a3d"/>
+                  <stop offset="0.85" stop-color="#c2186b"/>
+                  <stop offset="1" stop-color="#5a137a" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="cool">
+                  <stop offset="0" stop-color="#4b2aa8"/>
+                  <stop offset="1" stop-color="#4b2aa8" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect class="scene-bg" width="400" height="160"/>
+              <path d="M-20 160L60 0M30 160L110 0M80 160L160 0M130 160L210 0M180 160L260 0M230 160L310 0M280 160L360 0M330 160L410 0M380 160L460 0" stroke="#2a1561" stroke-width="10"/>
+              <ellipse cx="80" cy="40" rx="70" ry="40" fill="url(#cool)"/>
+              <ellipse cx="360" cy="130" rx="80" ry="40" fill="url(#cool)"/>
+              <ellipse cx="236" cy="96" rx="44" ry="30" fill="url(#heat)"/>
+              <circle cx="276" cy="76" r="17" fill="url(#heat)"/>
+              <g class="fawn-box">
+                <rect x="190" y="54" width="106" height="72" rx="3" fill="none" stroke="#7cffb2" stroke-width="2"/>
+                <rect x="190" y="38" width="76" height="16" fill="#7cffb2"/>
+                <text x="196" y="50" font-size="11" font-weight="500" fill="#0b2a1a">fawn 0.94</text>
+              </g>
+              <text x="22" y="34" font-size="10.5" fill="#ffffff" opacity="0.6">ALT 32 m</text>
+              <path d="M12 130v14h14M388 130v14h-14M388 30V16h-14M12 30V16h14" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.5"/>
+              <rect class="fawn-scan" width="400" height="2" fill="#ffffff" opacity="0.3"/>
+            </svg>
           </div>
-          <a href="https://fawnrescue.github.io/" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Website
-          </a>
+          <div class="card-body">
+            <h3><a href="https://fawnrescue.github.io/" target="_blank">FawnRescue</a></h3>
+            <p>Open-hardware drone with thermal camera and YOLO-based detection for rescuing fawns from agricultural machines.</p>
+            <ul class="project-tags">
+              <li>Python</li>
+              <li>YOLO</li>
+              <li>Drone</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">📝</div>
-          <h3>CiteAssist</h3>
-          <p>ACL-published web service that auto-generates BibTeX citations for arXiv and other preprint servers.</p>
-          <div class="project-tags">
-            <span class="tag">NLP</span>
-            <span class="tag">Python</span>
-            <span class="tag">Web</span>
+
+        <article class="project-card" data-scene="mail">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <path d="M124 78H262" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9" opacity="0.45"/>
+              <g class="mail">
+                <rect x="44" y="56" width="64" height="44" rx="6" fill="#ffffff"/>
+                <path d="M47 60l30 22 30-22" fill="none" stroke="#5865f2" stroke-width="3" stroke-linejoin="round"/>
+              </g>
+              <circle cx="310" cy="78" r="31" fill="#ffffff" opacity="0.14"/>
+              <g class="badge">
+                <circle cx="310" cy="78" r="22" fill="#3ba55d"/>
+                <path class="badge-check" pathLength="1" d="M299 79l8 8 15-16" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <text x="310" y="132" text-anchor="middle" font-size="12" fill="#ffffff" opacity="0.85">verified</text>
+            </svg>
           </div>
-          <a href="https://citeassist.uni-goettingen.de" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Try it
-          </a>
+          <div class="card-body">
+            <h3><a href="https://emailbot.larskaesberg.de/" target="_blank">EmailBot</a></h3>
+            <p>Discord bot for email verification with 56+ stars. Used by university communities for member validation.</p>
+            <ul class="project-tags">
+              <li>JavaScript</li>
+              <li>Discord</li>
+              <li>Bot</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">🤖</div>
-          <h3>MALLM</h3>
-          <p>Multi-Agent Large Language Model framework for collaborative AI reasoning and debate systems.</p>
-          <div class="project-tags">
-            <span class="tag">LLM</span>
-            <span class="tag">Multi-Agent</span>
-            <span class="tag">Python</span>
+
+        <article class="project-card" data-scene="deja">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <g class="deja-old">
+                <rect x="28" y="18" width="206" height="48" rx="10" fill="#17686e"/>
+                <circle cx="48" cy="42" r="9" fill="#8fe3d5"/>
+                <rect x="66" y="32" width="104" height="5" rx="2.5" fill="#8fe3d5" opacity="0.8"/>
+                <rect x="66" y="44" width="74" height="5" rx="2.5" fill="#8fe3d5" opacity="0.5"/>
+                <rect x="176" y="31" width="48" height="18" rx="9" fill="#3ba55d"/>
+                <path d="M184 40l3.5 3.5 6.5-7" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="198" y="44" font-size="9.5" fill="#ffffff">solved</text>
+              </g>
+              <path class="deja-link" pathLength="1" d="M300 94C300 72 270 54 236 46" fill="none" stroke="#ffd25e" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1"/>
+              <g class="deja-echo" fill="none" stroke="#ffffff">
+                <rect x="180" y="98" width="196" height="48" rx="10" stroke-width="1.5" opacity="0.25"/>
+                <rect x="173" y="95" width="196" height="48" rx="10" stroke-width="1.5" opacity="0.45"/>
+              </g>
+              <g class="deja-new">
+                <rect x="166" y="92" width="196" height="48" rx="10" fill="#ffffff"/>
+                <circle cx="186" cy="116" r="9" fill="#0e4a4f"/>
+                <rect x="204" y="106" width="104" height="5" rx="2.5" fill="#9fb4b6"/>
+                <rect x="204" y="118" width="74" height="5" rx="2.5" fill="#c5d3d4"/>
+              </g>
+              <g class="deja-tag">
+                <rect x="282" y="58" width="86" height="20" rx="10" fill="#ffd25e"/>
+                <text x="325" y="72" text-anchor="middle" font-size="11" font-weight="500" fill="#0e4a4f">seen before</text>
+              </g>
+            </svg>
           </div>
-          <a href="https://github.com/gipplab/MALLM" target="_blank" class="project-link">
-            <i class="fab fa-github"></i> GitHub
-          </a>
+          <div class="card-body">
+            <h3><a href="https://github.com/lkaesberg/Dejavue" target="_blank">Dejavue</a></h3>
+            <p>Discord bot for help channels that catches duplicate questions as they are posted and turns solved threads into a searchable knowledge base.</p>
+            <ul class="project-tags">
+              <li>TypeScript</li>
+              <li>Discord</li>
+              <li>Semantic Search</li>
+            </ul>
+          </div>
         </article>
-        
-        <article class="project-card">
-          <div class="project-icon">🔭</div>
-          <h3>GotoPiScope</h3>
-          <p>Raspberry Pi-based telescope control system for automated astronomical observations.</p>
-          <div class="project-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Raspberry Pi</span>
-            <span class="tag">Astronomy</span>
+
+        <article class="project-card" data-scene="mensa">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.85">
+                <path class="steam steam-1" d="M186 38c-6-6 6-12 0-18s6-12 0-18"/>
+                <path class="steam steam-2" d="M200 34c-6-6 6-12 0-18s6-12 0-18"/>
+                <path class="steam steam-3" d="M214 38c-6-6 6-12 0-18s6-12 0-18"/>
+              </g>
+              <circle cx="200" cy="96" r="50" fill="#ffffff"/>
+              <circle cx="200" cy="96" r="37" fill="#f4f1ec"/>
+              <ellipse cx="189" cy="90" rx="19" ry="14" fill="#f4c542"/>
+              <circle cx="215" cy="108" r="11" fill="#4caf50"/>
+              <ellipse cx="216" cy="83" rx="10" ry="8" fill="#a0522d"/>
+              <path d="M126 52v88M118 52v20M134 52v20M118 72q8 9 16 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+              <path d="M274 52q14 22 0 44v44" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+              <path class="sparkle sparkle-1" d="M300 26c.2 5 1.2 7 8 8-6.8 1-7.8 3-8 8-.3-5-1.3-7-8-8 6.7-1 7.7-3 8-8z" fill="#ffffff"/>
+              <path class="sparkle sparkle-2" d="M92 104c.2 4 1 5.6 6 6.4-5 .8-5.8 2.4-6 6.4-.2-4-1-5.6-6-6.4 5-.8 5.8-2.4 6-6.4z" fill="#ffffff"/>
+            </svg>
           </div>
-          <a href="https://github.com/lkaesberg/GotoPiScope" target="_blank" class="project-link">
-            <i class="fab fa-github"></i> GitHub
-          </a>
+          <div class="card-body">
+            <h3><a href="https://mensa.larskaesberg.de/" target="_blank">AI Mensa</a></h3>
+            <p>Fun app that generates AI images of daily meals in Göttingen university canteens. See what your food might look like!</p>
+            <ul class="project-tags">
+              <li>AI</li>
+              <li>Image Gen</li>
+              <li>Web</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="project-card" data-scene="scope">
+          <div class="card-scene" aria-hidden="true">
+            <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+              <rect class="scene-bg" width="400" height="160"/>
+              <g fill="#ffffff"><circle cx="247" cy="116" r="1.3" opacity="0.83"/><circle cx="370" cy="116" r="1.5" opacity="0.90"/><circle cx="19" cy="75" r="1.6" opacity="0.92"/><circle cx="257" cy="139" r="0.6" opacity="0.42"/><circle cx="188" cy="42" r="0.9" opacity="0.68"/><circle cx="228" cy="8" r="0.7" opacity="0.48"/><circle cx="245" cy="25" r="0.6" opacity="0.35"/><circle cx="343" cy="37" r="0.7" opacity="0.48"/><circle cx="385" cy="135" r="0.7" opacity="0.52"/><circle cx="377" cy="86" r="1.1" opacity="0.76"/><circle cx="147" cy="31" r="0.6" opacity="0.44"/><circle cx="33" cy="51" r="1.0" opacity="0.71"/><circle cx="138" cy="52" r="1.3" opacity="0.84"/><circle cx="193" cy="110" r="0.6" opacity="0.38"/><circle cx="382" cy="9" r="1.2" opacity="0.80"/><circle cx="332" cy="9" r="1.3" opacity="0.82"/><circle cx="149" cy="92" r="0.6" opacity="0.36"/><circle cx="375" cy="35" r="1.2" opacity="0.80"/><circle cx="365" cy="145" r="0.7" opacity="0.56"/><circle cx="306" cy="22" r="1.2" opacity="0.80"/><circle cx="314" cy="133" r="0.6" opacity="0.37"/><circle cx="361" cy="56" r="1.5" opacity="0.90"/><circle cx="217" cy="52" r="0.7" opacity="0.54"/><circle cx="76" cy="18" r="0.6" opacity="0.44"/><circle cx="183" cy="68" r="0.6" opacity="0.38"/><circle cx="360" cy="11" r="0.9" opacity="0.65"/></g>
+              <circle cx="300" cy="52" r="9" fill="#ffffff" opacity="0.15"/>
+              <circle cx="300" cy="52" r="3" fill="#ffffff"/>
+              <text class="scope-label" x="318" y="44" font-size="12" fill="#ffffff" opacity="0.85">Vega</text>
+              <circle class="scope-lock" cx="300" cy="52" r="18" fill="none" stroke="#ff6b5e" stroke-width="1.5"/>
+              <g class="reticle" fill="none" stroke="#ff6b5e" stroke-width="1.5" stroke-linecap="round">
+                <circle r="18"/>
+                <path d="M-28 0h16M12 0h16M0-28v16M0 12v16"/>
+              </g>
+              <g fill="none" stroke="#ffffff" stroke-linecap="round" opacity="0.55">
+                <path d="M40 132l56-30" stroke-width="9"/>
+                <path d="M70 124l-12 32M70 124l12 32M70 124v32" stroke-width="2"/>
+              </g>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3><a href="https://github.com/lkaesberg/GotoPiScope" target="_blank">GotoPiScope</a></h3>
+            <p>Raspberry Pi-based telescope control system for automated astronomical observations.</p>
+            <ul class="project-tags">
+              <li>Python</li>
+              <li>Raspberry Pi</li>
+              <li>Astronomy</li>
+            </ul>
+          </div>
         </article>
       </div>
     </section>
 
+
     <!-- Experience & Education Section -->
     <section class="section" id="experience">
-      <h2 class="section-title">
-        <span class="title-icon">💼</span>
-        Experience & Education
-      </h2>
-      
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-marker current"></div>
-          <div class="timeline-content">
+      <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-compass"/></svg>Experience and education</h2>
+
+      <ol class="timeline">
+        <li class="timeline-item is-current">
+          <p class="timeline-date">Jan&nbsp;2025 – now</p>
+          <div>
             <h3>Doctoral Researcher</h3>
-            <p class="timeline-org">University of Göttingen • <a href="https://gipplab.uni-goettingen.de/" target="_blank">GippLab</a></p>
-            <p class="timeline-date">Jan 2025 – Present</p>
-            <p>Research on multi-agent systems, LLM reasoning, and NLP applications.</p>
+            <p class="timeline-org">University of Göttingen, <a href="https://gipplab.uni-goettingen.de/" target="_blank">GippLab</a></p>
+            <p class="timeline-desc">Research on multi-agent systems, LLM reasoning, and NLP applications.</p>
           </div>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
+        </li>
+
+        <li class="timeline-item">
+          <p class="timeline-date">2021 – 2025</p>
+          <div>
             <h3>Academic Tutor</h3>
-            <p class="timeline-org">University of Göttingen • CS Department</p>
-            <p class="timeline-date">2021 – 2025</p>
-            <p>Teaching assistant for algorithms, data structures, and machine learning courses.</p>
+            <p class="timeline-org">University of Göttingen, CS Department</p>
+            <p class="timeline-desc">Teaching assistant for algorithms, data structures, and machine learning courses.</p>
           </div>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker edu"></div>
-          <div class="timeline-content">
+        </li>
+
+        <li class="timeline-item is-degree">
+          <p class="timeline-date">Oct&nbsp;2022 – Dec&nbsp;2024</p>
+          <div>
             <h3>M.Sc. Computer Science</h3>
-            <p class="timeline-org">University of Göttingen • Focus: Artificial Intelligence</p>
-            <p class="timeline-date">Oct 2022 – Dec 2024</p>
-            <p>Thesis: "Decision Protocols in Multi-Agent Large Language Model Conversations"</p>
+            <p class="timeline-org">University of Göttingen, focus on artificial intelligence</p>
+            <p class="timeline-desc">Thesis: "Decision Protocols in Multi-Agent Large Language Model Conversations"</p>
           </div>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-marker edu"></div>
-          <div class="timeline-content">
+        </li>
+
+        <li class="timeline-item is-degree">
+          <p class="timeline-date">Oct&nbsp;2019 – Oct&nbsp;2022</p>
+          <div>
             <h3>B.Sc. Computer Science</h3>
-            <p class="timeline-org">University of Göttingen • Focus: Computational Neuroscience</p>
-            <p class="timeline-date">Oct 2019 – Oct 2022</p>
+            <p class="timeline-org">University of Göttingen, focus on computational neuroscience</p>
           </div>
-        </div>
-      </div>
+        </li>
+      </ol>
     </section>
 
     <!-- Skills Section -->
     <section class="section" id="skills">
-      <h2 class="section-title">
-        <span class="title-icon">⚡</span>
-        Skills & Interests
-      </h2>
-      
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3><i class="fas fa-brain"></i> Research</h3>
+      <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg>Skills and interests</h2>
+
+      <dl class="skills">
+        <dt><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-flask"/></svg>Research</dt>
+        <dd>
           <ul>
-            <li>Spatial Reasoning with LLMs</li>
-            <li>Natural Language Processing</li>
-            <li>Large Language Models</li>
-            <li>AI Benchmarking</li>
+            <li>Spatial reasoning with LLMs</li>
+            <li>Natural language processing</li>
+            <li>Large language models</li>
+            <li>AI benchmarking</li>
           </ul>
-        </div>
-        
-        <div class="skill-category">
-          <h3><i class="fas fa-code"></i> Programming</h3>
+        </dd>
+
+        <dt><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Programming</dt>
+        <dd>
           <ul>
             <li>Python (PyTorch, Transformers)</li>
             <li>TypeScript / JavaScript</li>
             <li>C++ / CUDA</li>
             <li>Git / CI/CD</li>
           </ul>
-        </div>
-        
-        <div class="skill-category">
-          <h3><i class="fas fa-cogs"></i> Technologies</h3>
+        </dd>
+
+        <dt><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-cpu"/></svg>Technologies</dt>
+        <dd>
           <ul>
-            <li>Deep Learning Frameworks</li>
-            <li>Cloud Computing (AWS, GCP)</li>
+            <li>Deep learning frameworks</li>
+            <li>Cloud computing (AWS, GCP)</li>
             <li>Docker / Kubernetes</li>
-            <li>Embedded Systems</li>
+            <li>Embedded systems</li>
           </ul>
-        </div>
-        
-        <div class="skill-category">
-          <h3><i class="fas fa-rocket"></i> Interests</h3>
+        </dd>
+
+        <dt><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-telescope"/></svg>Interests</dt>
+        <dd>
           <ul>
-            <li>Autonomous Drones</li>
-            <li>Robotics & Automation</li>
-            <li id="space-interest" title="I wonder what's out there...">
-              Space & Astronomy <span class="easter-indicator" aria-hidden="true">✦</span>
-            </li>
-            <li>Open Source</li>
+            <li>Autonomous drones</li>
+            <li>Robotics and automation</li>
+            <li id="space-interest" title="I wonder what's out there...">Space and astronomy<span class="easter-indicator" aria-hidden="true">✦</span></li>
+            <li>Open source</li>
           </ul>
-        </div>
-      </div>
+        </dd>
+      </dl>
     </section>
 
     <!-- Contact Section -->
     <section class="section" id="contact">
-      <h2 class="section-title">
-        <span class="title-icon">📬</span>
-        Get in Touch
-      </h2>
-      
-      <div class="contact-content">
-        <p>I'm always happy to discuss research collaborations, interesting projects, or opportunities. Feel free to reach out!</p>
-        
-        <div class="contact-grid">
-          <a href="mailto:l.kaesberg@uni-goettingen.de" class="contact-card">
-            <i class="fas fa-envelope"></i>
-            <span>l.kaesberg@uni-goettingen.de</span>
-          </a>
-          
-          <a href="https://github.com/lkaesberg" target="_blank" class="contact-card">
-            <i class="fab fa-github"></i>
-            <span>github.com/lkaesberg</span>
-          </a>
-          
-          <a href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank" class="contact-card">
-            <i class="fab fa-linkedin"></i>
-            <span>LinkedIn</span>
-          </a>
-          
-          <a href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank" class="contact-card">
-            <i class="fas fa-graduation-cap"></i>
-            <span>Google Scholar</span>
-          </a>
-        </div>
+      <h2><svg class="icon h2-icon" aria-hidden="true" focusable="false"><use href="#i-send"/></svg>Contact</h2>
+
+      <p class="contact-intro">I'm always happy to discuss research collaborations, interesting projects, or opportunities. Feel free to reach out!</p>
+      <div class="contact-email-row">
+        <a class="contact-email" href="mailto:l.kaesberg@uni-goettingen.de">l.kaesberg@uni-goettingen.de</a>
+        <p class="note note-email" aria-hidden="true">
+          <svg class="doodle doodle-arrow-left" viewBox="0 0 80 40"><path d="M76 26c-18 6-42 7-66-4"/><path d="M20 12L9 22l13 6"/></svg>
+          best way to reach me
+        </p>
       </div>
+
+      <ul class="contact-links">
+        <li><a class="chip" href="https://github.com/lkaesberg" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><span>GitHub</span></a></li>
+        <li><a class="chip" href="https://linkedin.com/in/lars-kaesberg-351664217" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></li>
+        <li><a class="chip" href="https://scholar.google.de/citations?user=MGBdtVsAAAAJ" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-scholar"/></svg><span>Google Scholar</span></a></li>
+      </ul>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
-    <p>© 2025 Lars Benedikt Kaesberg</p>
-    <p class="footer-secret-hint">✨ A little cosmic surprise is hidden on this page.</p>
+    <p>© 2026 Lars Benedikt Kaesberg</p>
+    <p class="footer-secret-hint">A little cosmic surprise is hidden on this page.</p>
   </footer>
 
   <!-- Easter Egg Modal -->
   <div class="easter-egg-modal" id="easter-modal">
-    <div class="modal-content">
-      <h2>🚀 Secret Space Menu Unlocked!</h2>
+    <div class="modal-content" role="dialog" aria-labelledby="easter-title">
+      <h2 id="easter-title">🚀 Secret space menu unlocked!</h2>
       <p>You found the hidden space easter egg. Choose your mission:</p>
       <div class="modal-buttons">
-        <a href="space-game.html?v=20260403-game-page2" class="btn btn-primary" id="launch-space-game">
-          <i class="fas fa-rocket"></i> Space Defender Game
-        </a>
-        <a href="solar-system.html" class="btn btn-secondary" id="launch-solar-system">
-          <i class="fas fa-globe"></i> Solar System Fun Facts
-        </a>
-        <button class="btn btn-secondary" id="close-modal">
-          Maybe Later
-        </button>
+        <a href="space-game.html?v=20260403-game-page2" class="btn btn-primary" id="launch-space-game"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg>Play Space Defender</a>
+        <a href="solar-system.html" class="btn btn-secondary" id="launch-solar-system"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-telescope"/></svg>Read solar system facts</a>
+        <button class="btn btn-secondary" id="close-modal" type="button">Maybe later</button>
       </div>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/modern.js?v=20260403-main-fix3"></script>
+  <script src="js/modern.js?v=20261018l"></script>
 </body>
 </html>
