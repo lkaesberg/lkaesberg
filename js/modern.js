@@ -315,8 +315,7 @@ const ProjectScenes = {
 // ============================================
 // Background star field: three depth layers that drift very slowly,
 // shift a little with the cursor (parallax) and with scrolling, and
-// brighten softly around the pointer. The stars inside the portrait's
-// window read the same pointer position so they sit at their own depth.
+// brighten softly around the pointer.
 // ============================================
 
 const Starfield = {
@@ -326,8 +325,6 @@ const Starfield = {
 
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.portrait = document.querySelector('.portrait');
-    this.lastPx = null;
     this.still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.pointer = { x: 0, y: 0, tx: 0, ty: 0, px: -1e4, py: -1e4 };
     this.meteor = null;
@@ -371,6 +368,7 @@ const Starfield = {
     const css = getComputedStyle(document.documentElement);
     this.color = css.getPropertyValue('--sky-star').trim() || '#18213a';
     this.alpha = parseFloat(css.getPropertyValue('--sky-opacity')) || 0.3;
+    this.size = parseFloat(css.getPropertyValue('--sky-size')) || 1;
     this.dark = document.documentElement.getAttribute('data-theme') === 'dark';
   },
 
@@ -409,12 +407,6 @@ const Starfield = {
     // Ease toward the cursor so the sky floats rather than jumps
     pointer.x += (pointer.tx - pointer.x) * 0.045;
     pointer.y += (pointer.ty - pointer.y) * 0.045;
-    const px = `${pointer.x.toFixed(3)},${pointer.y.toFixed(3)}`;
-    if (this.portrait && px !== this.lastPx) {
-      this.portrait.style.setProperty('--px', pointer.x.toFixed(3));
-      this.portrait.style.setProperty('--py', pointer.y.toFixed(3));
-      this.lastPx = px;
-    }
 
     const scroll = window.scrollY;
     const drift = this.still ? 0 : t * 0.004;
@@ -438,7 +430,7 @@ const Starfield = {
 
       ctx.globalAlpha = Math.min(1, (a + near * 0.6) * this.alpha);
       ctx.beginPath();
-      ctx.arc(x, y, star.r * (1 + near * 0.6), 0, Math.PI * 2);
+      ctx.arc(x, y, star.r * this.size * (1 + near * 0.6), 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -489,7 +481,15 @@ const Flyby = {
     this.el = document.querySelector('.flyby');
     if (!this.el || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !this.el.animate) return;
 
-    this.el.addEventListener('click', () => EasterEgg.showModal());
+    // It flies behind the content, so clicks are matched by position instead
+    document.addEventListener('click', (e) => {
+      if (this.el.hidden || e.target.closest('a, button, input, .project-card')) return;
+      const r = this.el.getBoundingClientRect();
+      const pad = 12;
+      if (e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad) {
+        EasterEgg.showModal();
+      }
+    });
     this.schedule(9000 + Math.random() * 6000);
   },
 

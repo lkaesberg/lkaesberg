@@ -17,7 +17,8 @@
 
   /* Background sky: a printed star chart by day */
   --sky-star: #18213a;
-  --sky-opacity: 0.38;
+  --sky-opacity: 0.55;
+  --sky-size: 1.7;
   --flyby-opacity: 0.4;
   --nebula-a: rgba(36, 66, 184, 0.06);
   --nebula-b: rgba(150, 90, 220, 0.05);
@@ -40,6 +41,7 @@
   /* ...and the real night sky after dark */
   --sky-star: #dfe6ff;
   --sky-opacity: 0.85;
+  --sky-size: 1;
   --flyby-opacity: 0.6;
   --nebula-a: rgba(80, 110, 255, 0.12);
   --nebula-b: rgba(160, 90, 255, 0.09);
@@ -128,17 +130,18 @@ button:focus-visible {
   height: 100%;
 }
 
-/* The occasional fly-by: a small line-drawn rocket or satellite */
+/* The occasional fly-by: a small line-drawn rocket or satellite.
+   It travels with the sky, behind the page content. */
 .flyby {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: -1;
   width: 30px;
   height: 30px;
   margin: -15px 0 0 -15px;
   color: var(--sky-star);
-  cursor: pointer;
+  pointer-events: none;
 }
 
 .flyby .icon {
@@ -380,66 +383,19 @@ h3 {
   animation: settle 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
 }
 
-/* An arched window of night sky; the head breaks out above its top */
+/* The portrait: a clean circle with a thin double ring */
 .portrait {
-  --arch-top: 17%;
-  position: relative;
-  aspect-ratio: 760 / 722;
-}
-
-.portrait-sky,
-.portrait-arch {
-  position: absolute;
-  top: var(--arch-top);
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  /* Semicircular top: horizontal radius is half the width, vertical radius
-     the same length expressed against the arch height (83% of the figure) */
-  border-radius: 50% 50% 26px 26px / 63.4% 63.4% 26px 26px;
-}
-
-.portrait-sky {
-  background:
-    radial-gradient(circle at 22% 34%, rgba(98, 125, 255, 0.45), transparent 46%),
-    radial-gradient(circle at 82% 22%, rgba(170, 100, 255, 0.35), transparent 40%),
-    linear-gradient(180deg, #1e2b5c, #0e1530 85%);
-  box-shadow: 0 34px 60px -32px rgba(12, 18, 38, 0.55);
-}
-
-[data-theme="dark"] .portrait-sky {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
   box-shadow:
-    inset 0 0 0 1px rgba(223, 229, 241, 0.1),
-    0 30px 60px -30px rgba(0, 0, 0, 0.6);
-}
-
-/* The stars inside the window shift against the cursor, for depth */
-.portrait-stars {
-  position: absolute;
-  inset: -4%;
-  width: 108%;
-  height: 108%;
-  fill: #ffffff;
-  transform: translate(calc(var(--px, 0) * -7px), calc(var(--py, 0) * -6px));
-}
-
-/* The body, clipped to the arch: same image, offset so it lines up with the head layer */
-.portrait-arch img {
-  position: absolute;
-  left: 0;
-  top: -20.48%;
-  width: 100%;
-  height: 120.48%;
-}
-
-/* The head, drawn again unclipped above the arch line so it pops out */
-.portrait-head {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  clip-path: inset(0 0 74% 0);
+    0 0 0 1px var(--line),
+    0 0 0 7px var(--paper),
+    0 0 0 8px var(--line),
+    0 28px 50px -28px rgba(12, 18, 38, 0.5);
 }
 
 @keyframes settle {
