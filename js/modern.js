@@ -478,13 +478,11 @@ const Starfield = {
 };
 
 // ============================================
-// Fly-by: every so often something small crosses the sky.
-// Clicking it opens the hidden space menu.
+// Satellite pass: every so often a small point of light drifts across
+// the sky, like a real satellite. Clicking it opens the hidden space menu.
 // ============================================
 
 const Flyby = {
-  kinds: ['rocket', 'rocket', 'satellite', 'satellite', 'ufo'],
-
   init() {
     this.el = document.querySelector('.flyby');
     if (!this.el || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !this.el.animate) return;
@@ -503,34 +501,23 @@ const Flyby = {
       return;
     }
 
-    const kind = this.kinds[Math.floor(Math.random() * this.kinds.length)];
-    const icon = kind === 'rocket' ? 'rocket' : kind;
-    this.el.innerHTML = `<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-${icon}"/></svg>`;
-
     const w = window.innerWidth;
     const h = window.innerHeight;
     const leftToRight = Math.random() < 0.5;
-    const x0 = leftToRight ? -40 : w + 40;
-    const x1 = leftToRight ? w + 40 : -40;
+    const x0 = leftToRight ? -20 : w + 20;
+    const x1 = leftToRight ? w + 20 : -20;
     // Stay below the sticky top bar and above the bottom edge
     const y0 = h * (0.22 + Math.random() * 0.56);
-    const y1 = Math.min(h * 0.85, Math.max(h * 0.22, y0 + (Math.random() - 0.5) * h * 0.4));
-    const heading = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
-    const duration = { rocket: 13000, satellite: 24000, ufo: 9000 }[kind];
-
-    const frames = [];
-    for (let i = 0; i <= 24; i++) {
-      const t = i / 24;
-      const x = x0 + (x1 - x0) * t;
-      const y = y0 + (y1 - y0) * t + (kind === 'ufo' ? Math.sin(t * Math.PI * 5) * 12 : 0);
-      // The rocket icon points up, so turn it to face its heading; the satellite tumbles slowly
-      const rotate = kind === 'rocket' ? heading + 90 : kind === 'satellite' ? t * 140 : Math.sin(t * Math.PI * 5) * 8;
-      const opacity = t < 0.08 ? t / 0.08 : t > 0.92 ? (1 - t) / 0.08 : 1;
-      frames.push({ transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${rotate.toFixed(1)}deg)`, opacity });
-    }
+    const y1 = Math.min(h * 0.85, Math.max(h * 0.22, y0 + (Math.random() - 0.5) * h * 0.5));
 
     this.el.hidden = false;
-    const run = this.el.animate(frames, { duration, easing: 'linear', fill: 'forwards' });
+    const run = this.el.animate([
+      { transform: `translate(${x0}px, ${y0}px)`, opacity: 0 },
+      { opacity: 1, offset: 0.1 },
+      { opacity: 1, offset: 0.9 },
+      { transform: `translate(${x1}px, ${y1}px)`, opacity: 0 }
+    ], { duration: 22000 + Math.random() * 8000, easing: 'linear', fill: 'forwards' });
+
     run.onfinish = () => {
       this.el.hidden = true;
       this.schedule(25000 + Math.random() * 20000);

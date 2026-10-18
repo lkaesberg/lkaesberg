@@ -1,8 +1,8 @@
 /* ============================================
    Portfolio Styles
-   Crisp type over a quiet, living star field, a few handwritten
-   notes in ballpoint blue, a cut-out portrait standing in the sky,
-   and project cards that turn into little scenes of each project.
+   Clean type over a quiet, living star field, a cut-out portrait in
+   an arched window of night sky, and project cards that turn into
+   small scenes of each project on hover.
    ============================================ */
 
 :root {
@@ -18,12 +18,11 @@
   /* Background sky: a printed star chart by day */
   --sky-star: #18213a;
   --sky-opacity: 0.38;
-  --flyby-opacity: 0.4;
+  --flyby-opacity: 0.45;
   --nebula-a: rgba(36, 66, 184, 0.06);
   --nebula-b: rgba(150, 90, 220, 0.05);
 
   --font: 'Jost', 'Futura', 'Century Gothic', 'Avenir Next', sans-serif;
-  --hand: 'Caveat', 'Bradley Hand', 'Segoe Print', cursive;
 
   --measure: 42rem;
   --label-col: 8.5rem;
@@ -41,7 +40,7 @@
   /* ...and the real night sky after dark */
   --sky-star: #dfe6ff;
   --sky-opacity: 0.85;
-  --flyby-opacity: 0.6;
+  --flyby-opacity: 0.9;
   --nebula-a: rgba(80, 110, 255, 0.12);
   --nebula-b: rgba(160, 90, 255, 0.09);
 }
@@ -129,55 +128,30 @@ button:focus-visible {
   height: 100%;
 }
 
-/* The occasional fly-by: a rocket, a satellite or (rarely) a UFO */
+/* Now and then a satellite passes: a small, steady point of light */
 .flyby {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 5;
-  width: 30px;
-  height: 30px;
-  margin: -15px 0 0 -15px;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
   color: var(--sky-star);
   cursor: pointer;
 }
 
-.flyby .icon {
-  width: 100%;
-  height: 100%;
-  stroke-width: 1.5;
+.flyby::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px 1px currentColor;
   opacity: var(--flyby-opacity);
-}
-
-.flyby .blink {
-  animation: blink 1.4s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* ============================================
-   Handwritten notes and doodles
-   ============================================ */
-
-.note {
-  font-family: var(--hand);
-  font-weight: 600;
-  line-height: 1;
-  color: var(--pen);
-}
-
-.doodle {
-  fill: none;
-  stroke: var(--pen);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.doodle-star {
-  stroke-width: 1.5;
 }
 
 /* ============================================
@@ -227,7 +201,6 @@ button:focus-visible {
 .chip:hover {
   border-color: var(--pen);
   color: var(--pen);
-  transform: translateY(-2px) rotate(-1.5deg);
 }
 
 /* ============================================
@@ -333,11 +306,10 @@ button:focus-visible {
 }
 
 .h2-icon {
-  width: 1.55rem;
-  height: 1.55rem;
-  color: var(--pen);
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--ink-soft);
   stroke-width: 1.6;
-  transform: rotate(-8deg);
 }
 
 h3 {
@@ -366,14 +338,6 @@ h3 {
   position: relative;
 }
 
-.note-hi {
-  display: inline-block;
-  margin-bottom: 0.4rem;
-  font-size: 2.1rem;
-  transform: rotate(-4deg);
-  transform-origin: left bottom;
-}
-
 .hero-name h1 {
   font-size: 4.4rem;
   line-height: 1;
@@ -385,14 +349,6 @@ h3 {
   margin-top: 1rem;
   font-size: 1.3rem;
   color: var(--ink-soft);
-}
-
-.doodle-star-a {
-  position: absolute;
-  top: 0.1rem;
-  left: 7.6rem;
-  width: 1.5rem;
-  transform: rotate(14deg);
 }
 
 .hero-intro {
@@ -484,49 +440,6 @@ h3 {
   clip-path: inset(0 0 74% 0);
 }
 
-.note-me {
-  position: absolute;
-  top: 1%;
-  left: -6.25rem;
-  font-size: 1.75rem;
-  transform: rotate(-7deg);
-  animation: fade-in 0.4s ease 0.8s both;
-}
-
-/* Arrow from the note down to the face */
-.doodle-arrow {
-  display: block;
-  width: 4.5rem;
-  margin: 0.2rem 0 0 2.5rem;
-  transform: scaleY(-1);
-}
-
-.draw {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-  animation: draw 0.6s ease-out 1s both;
-}
-
-.draw-head {
-  animation-duration: 0.25s;
-  animation-delay: 1.55s;
-}
-
-.doodle-star-b {
-  position: absolute;
-  top: -0.5rem;
-  right: 0.5rem;
-  width: 1.6rem;
-  transform: rotate(-10deg);
-}
-
-.doodle-star-c {
-  position: absolute;
-  top: 46%;
-  left: -1.75rem;
-  width: 1rem;
-}
-
 @keyframes settle {
   from {
     opacity: 0;
@@ -578,7 +491,7 @@ h3 {
   width: 1.15rem;
   height: 1.15rem;
   margin-top: 0.3rem;
-  color: var(--pen);
+  color: var(--ink-soft);
 }
 
 .news-item p {
@@ -604,9 +517,9 @@ h3 {
   border: none;
   background: transparent;
   color: var(--pen);
-  font-family: var(--hand);
-  font-size: 1.45rem;
-  font-weight: 600;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -686,37 +599,11 @@ h3 {
 .publication-citations .icon {
   width: 0.95rem;
   height: 0.95rem;
-  color: var(--pen);
 }
 
 /* ============================================
    Projects: cards that become scenes on hover
    ============================================ */
-
-.section-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 0.5rem 1.75rem;
-  margin-bottom: 1.75rem;
-}
-
-.section-head h2 {
-  margin-bottom: 0;
-}
-
-.note-hover {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.2rem;
-  font-size: 1.6rem;
-  transform: rotate(-4deg) translateY(-0.2rem);
-}
-
-.doodle-arrow-down {
-  width: 2.9rem;
-  margin-top: 0.7rem;
-}
 
 .projects-grid {
   display: grid;
@@ -1225,7 +1112,7 @@ h3 {
   top: 0.3rem;
   width: 1.15rem;
   height: 1.15rem;
-  color: var(--pen);
+  color: var(--ink-soft);
 }
 
 .skills dd {
@@ -1274,33 +1161,15 @@ h3 {
   margin-bottom: 1rem;
 }
 
-.contact-email-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
 .contact-email {
+  display: inline-block;
+  margin-bottom: 1.5rem;
   font-size: 2.4rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
   text-decoration-thickness: 2px;
   overflow-wrap: anywhere;
-}
-
-.note-email {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 1.6rem;
-  transform: rotate(-3deg);
-}
-
-.doodle-arrow-left {
-  width: 3.5rem;
 }
 
 /* ============================================
@@ -1425,26 +1294,6 @@ h3 {
   .hero-name h1 {
     font-size: 3.6rem;
   }
-
-  /* Not enough room beside the portrait: the note sits above it, arrow pointing down */
-  .note-me {
-    top: -2.75rem;
-    left: auto;
-    right: -0.5rem;
-    font-size: 1.5rem;
-    transform: rotate(4deg);
-  }
-
-  .doodle-arrow {
-    width: 3.25rem;
-    margin: 0.1rem 0 0 0.5rem;
-    transform: rotate(205deg);
-  }
-
-  .doodle-star-b {
-    top: 42%;
-    right: -1.5rem;
-  }
 }
 
 @media (max-width: 760px) {
@@ -1460,12 +1309,6 @@ h3 {
 
   .hero-photo {
     width: 15rem;
-  }
-
-  /* Note sits to the right of the portrait, arrow pointing back at the face */
-  .note-me {
-    top: 12%;
-    right: -7.5rem;
   }
 
   .projects-grid {
@@ -1526,22 +1369,6 @@ h3 {
 
   .hero-photo {
     width: 13rem;
-  }
-
-  .note-me {
-    right: -6.5rem;
-  }
-
-  .doodle-star-c {
-    left: -0.75rem;
-  }
-
-  .note-hi {
-    font-size: 1.8rem;
-  }
-
-  .doodle-star-a {
-    left: 6.4rem;
   }
 
   .tagline {
@@ -1641,17 +1468,10 @@ h3 {
     font-size: 1.35rem;
   }
 
-  .note-email {
-    font-size: 1.4rem;
-  }
 }
 
 /* Touch screens have no hover: the card in the middle of the screen plays instead */
 @media (hover: none) {
-  .note-hover {
-    display: none;
-  }
-
   .project-card:hover:not(.is-active) {
     background: var(--card);
     color: var(--ink);
@@ -1683,8 +1503,8 @@ h3 {
   .footer-secret-hint,
   .news-toggle-btn,
   .easter-egg-modal,
-  .note,
-  .doodle {
+  .flyby,
+  .space {
     display: none !important;
   }
 
