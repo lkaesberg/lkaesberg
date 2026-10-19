@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-10-12",
+  "lastUpdated": "2026-10-19",
   "stats": {
     "papers": 10,
-    "citations": 166,
+    "citations": 170,
     "hIndex": 5,
     "i10Index": 4
   },
@@ -35,6 +35,15 @@
       "type": "preprint"
     },
     {
+      "title": "Is Visual Prompting All You Need? Studying VLM Spatial Reasoning under Progressive Visual Scaffolds",
+      "authors": "Lars Benedikt Kaesberg, Tianyu Yang, F. Wunderlich, Terry Ruas, Jan Philip Wahle, Daniel Kurzawe, Bela Gipp",
+      "venue": "",
+      "year": 2026,
+      "citations": 1,
+      "url": "https://www.semanticscholar.org/paper/b2de0b0168189b4f81ec7214456b781a0e9f5820",
+      "type": "preprint"
+    },
+    {
       "title": "Can Agents Deceive? Evaluating Reasoning and Deception in ParliamentBench using a Social Deduction Game",
       "authors": "Niklas Bauer, Lars Benedikt Kaesberg, Akiko Aizawa, Jan Philip Wahle, Bela Gipp, Terry Ruas",
       "venue": "",
@@ -44,20 +53,11 @@
       "type": "preprint"
     },
     {
-      "title": "Is Visual Prompting All You Need? Studying VLM Spatial Reasoning under Progressive Visual Scaffolds",
-      "authors": "Lars Benedikt Kaesberg, Tianyu Yang, F. Wunderlich, Terry Ruas, Jan Philip Wahle, Daniel Kurzawe, Bela Gipp",
-      "venue": "",
-      "year": 2026,
-      "citations": 0,
-      "url": "https://www.semanticscholar.org/paper/b2de0b0168189b4f81ec7214456b781a0e9f5820",
-      "type": "preprint"
-    },
-    {
       "title": "Voting or Consensus? Decision-Making in Multi-Agent Debate",
       "authors": "Lars Benedikt Kaesberg, Jonas Becker, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
       "year": 2025,
-      "citations": 89,
+      "citations": 90,
       "url": "https://aclanthology.org/2025.findings-acl.606/",
       "type": "conference"
     },
@@ -66,7 +66,7 @@
       "authors": "Jonas Becker*, Lars Benedikt Kaesberg*, Niklas Bauer, Jan Philip Wahle, Terry Ruas, Bela Gipp (*equal contribution)",
       "venue": "EMNLP 2025 (Demo)",
       "year": 2025,
-      "citations": 22,
+      "citations": 23,
       "url": "https://aclanthology.org/2025.emnlp-demos.29/",
       "type": "conference"
     },
@@ -75,7 +75,7 @@
       "authors": "Lars Benedikt Kaesberg, Jan Philip Wahle, Terry Ruas, Bela Gipp",
       "venue": "EMNLP 2025 (Main)",
       "year": 2025,
-      "citations": 7,
+      "citations": 8,
       "url": "https://aclanthology.org/2025.emnlp-main.526/",
       "type": "conference"
     },
