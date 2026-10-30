@@ -465,8 +465,22 @@ h3 {
   font-variant-numeric: tabular-nums;
 }
 
-.news-item.is-hidden {
+.news-item.is-hidden,
+.publication-item.is-hidden,
+.pub-year-group.is-hidden {
   display: none;
+}
+
+/* Papers revealed by "Show all" fade in */
+.publication-item.is-revealed {
+  animation: reveal 0.35s ease-out both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .news-toggle-btn {
@@ -1470,7 +1484,12 @@ h3 {
     background: #ffffff;
   }
 
-  .news-item.is-hidden {
+  .news-item.is-hidden,
+  .pub-year-group.is-hidden {
     display: grid;
+  }
+
+  .publication-item.is-hidden {
+    display: list-item;
   }
 }

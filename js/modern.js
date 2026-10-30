@@ -87,6 +87,46 @@ const PublicationsLoader = {
         </ol>
       </div>
     `).join('');
+
+    this.setupToggle(container, publications.length);
+  },
+
+  // Start with the most recent few; the button reveals the rest
+  setupToggle(container, total) {
+    const button = document.getElementById('pubs-toggle-btn');
+    const initialVisible = 4;
+    if (!button || total <= initialVisible) return;
+
+    const items = Array.from(container.querySelectorAll('.publication-item'));
+    const groups = Array.from(container.querySelectorAll('.pub-year-group'));
+    let expanded = false;
+
+    const apply = () => {
+      items.forEach((item, index) => {
+        const hide = !expanded && index >= initialVisible;
+        item.classList.toggle('is-hidden', hide);
+        item.classList.toggle('is-revealed', expanded && index >= initialVisible);
+      });
+      // A year with none of its papers showing is hidden too
+      groups.forEach(group => {
+        group.classList.toggle('is-hidden', !group.querySelector('.publication-item:not(.is-hidden)'));
+      });
+      button.textContent = expanded ? 'Show fewer' : `Show all ${total} publications`;
+      button.setAttribute('aria-expanded', String(expanded));
+    };
+
+    button.hidden = false;
+    apply();
+
+    button.addEventListener('click', () => {
+      expanded = !expanded;
+      apply();
+      // After collapsing, bring the list back into view if it scrolled away
+      const section = document.getElementById('publications');
+      if (!expanded && section && section.getBoundingClientRect().top < 0) {
+        section.scrollIntoView({ block: 'start' });
+      }
+    });
   },
   
   createPublicationCard(pub) {
